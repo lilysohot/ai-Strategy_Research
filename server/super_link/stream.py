@@ -21,7 +21,7 @@ import logging
 import time
 import uuid
 from collections import deque
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Sequence
 from contextlib import asynccontextmanager
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
@@ -32,8 +32,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from server import store
 from server.config import get_config
-from server.super_link import controls, events, management
+from server.super_link import controls, events, management, observability
 from server.super_link import models as sl
+from server.super_link import output as sl_output
 from server.super_link.contracts import CollaborationError
 from server.super_link.coordination import automatic_budget
 
@@ -41,6 +42,8 @@ logger = logging.getLogger(__name__)
 
 SNAPSHOT_SCHEMA_VERSION = 1
 FACT_EVENT = "sl.fact"
+PREVIEW_EVENT = sl_output.PREVIEW_EVENT
+OUTPUT_RESET_EVENT = sl_output.OUTPUT_RESET_EVENT
 AUTH_REQUIRED_EVENT = "sl.auth_required"
 RESYNC_REQUIRED_EVENT = "sl.resync_required"
 UNAVAILABLE_EVENT = "sl.unavailable"
@@ -423,6 +426,23 @@ def control_frame(event: str, reason: str) -> str:
     )
 
 
+def output_reset_frame(space_id: uuid.UUID, run_ids: Sequence[str]) -> str:
+    """Tell the client that live preview for these runs has a gap.
+
+    The frame carries no ``id``: previews never advance the durable cursor.
+    """
+
+    return sse_frame(
+        OUTPUT_RESET_EVENT,
+        {
+            "schema_version": SNAPSHOT_SCHEMA_VERSION,
+            "space_id": str(space_id),
+            "run_ids": list(run_ids),
+            "reason": "preview_overflow",
+        },
+    )
+
+
 class FrameBuffer:
     """Per-connection output buffer with a hard frame and byte ceiling.
 
@@ -484,6 +504,47 @@ class FrameBuffer:
             self._bytes += size
             self._condition.notify()
             return True
+
+    async def put_preview(self, frame: str) -> bool:
+        """Try to enqueue a display-only frame without waiting.
+
+        Preview frames must never delay or displace facts.  They may use at
+        most half of the connection buffer; when that quota is exhausted the
+        frame is dropped and the caller reports a reset so the client can
+        rebuild from the archived trace.
+        """
+
+        size = len(frame.encode("utf-8"))
+        frame_cap = max(1, self.max_frames // 2)
+        byte_cap = max(1024, self.max_bytes // 2)
+        async with self._condition:
+            if self._closed:
+                return False
+            if len(self._frames) >= frame_cap or self._bytes + size > byte_cap:
+                return False
+            self._frames.append(frame)
+            self._bytes += size
+            self._condition.notify()
+            return True
+
+    async def wait_preview_space(self, *, size: int = 0) -> None:
+        """Wait until a preview frame of ``size`` bytes fits, or we close.
+
+        A dropped preview needs a reset even when the run has gone quiet. The
+        response loop signals this condition whenever ``get`` frees a frame,
+        so reset delivery does not depend on new model output arriving.
+        """
+
+        frame_cap = max(1, self.max_frames // 2)
+        byte_cap = max(1024, self.max_bytes // 2)
+        async with self._condition:
+            await self._condition.wait_for(
+                lambda: self._closed
+                or (
+                    len(self._frames) < frame_cap
+                    and self._bytes + size <= byte_cap
+                )
+            )
 
     def _close_locked(self) -> None:
         self._frames.clear()
@@ -916,10 +977,13 @@ async def _produce(
                     return
                 last_sent = time.monotonic()
     except _Expired:
+        observability.inc("sse.max_age_closed")
         await buffer.terminate()
     except _AuthLost:
+        observability.inc("sse.auth_revoked")
         await buffer.terminate(control_frame(AUTH_REQUIRED_EVENT, "auth_lost"))
     except _SlowConsumer:
+        observability.inc("sse.slow_closed")
         await buffer.terminate()
     except CollaborationError as exc:
         code = str(exc)
@@ -928,6 +992,7 @@ async def _produce(
                 control_frame(RESYNC_REQUIRED_EVENT, "cursor_expired")
             )
         elif code == "not_found":
+            observability.inc("sse.auth_revoked")
             await buffer.terminate(control_frame(AUTH_REQUIRED_EVENT, "auth_lost"))
         else:
             await buffer.terminate(
@@ -942,12 +1007,74 @@ async def _produce(
         )
 
 
+async def _produce_previews(
+    buffer: FrameBuffer,
+    subscription: sl_output.OutputSubscription,
+    *,
+    space_id: uuid.UUID,
+    output_epoch: str,
+) -> None:
+    """Forward process-local run previews without touching the fact cursor.
+
+    Preview frames are best effort.  When one cannot be delivered, the run is
+    marked for a reset and later frames for that run are withheld until the
+    reset has been sent, so the client never splices a gap.
+    """
+
+    sequences: dict[str, int] = {}
+    pending_reset: set[str] = set()
+    try:
+        while True:
+            if pending_reset:
+                frame = output_reset_frame(space_id, sorted(pending_reset))
+                if await buffer.put_preview(frame):
+                    observability.inc("preview.resets")
+                    pending_reset.clear()
+                    continue
+                if buffer.closed:
+                    return
+                # Dropping the reset is not an option: without new model
+                # output nothing would ever wake this producer again. Wait for
+                # the response loop to drain a frame, then retry immediately.
+                await buffer.wait_preview_space(size=len(frame.encode("utf-8")))
+                continue
+
+            item = await subscription.next()
+            if item is None:
+                return
+            if isinstance(item, sl_output.OutputReset):
+                pending_reset.update(item.run_ids)
+                continue
+            run_id = item.run_id
+            seq = sequences.get(run_id, 0) + 1
+            sequences[run_id] = seq
+            envelope = {
+                "schema_version": SNAPSHOT_SCHEMA_VERSION,
+                "space_id": str(space_id),
+                "run_id": run_id,
+                "output_epoch": output_epoch,
+                "output_seq": seq,
+                "kind": item.kind.value,
+                **item.data,
+            }
+            if await buffer.put_preview(sse_frame(PREVIEW_EVENT, envelope)):
+                observability.inc("preview.frames")
+            else:
+                observability.inc("preview.dropped")
+                pending_reset.add(run_id)
+    except asyncio.CancelledError:
+        raise
+    except Exception:
+        logger.warning("super-link preview producer failed", exc_info=True)
+
+
 async def event_stream(
     *,
     user_id: uuid.UUID,
     space_id: uuid.UUID,
     after: str,
     lease: ConnectionLease,
+    session_ids: Sequence[uuid.UUID] = (),
 ) -> AsyncIterator[str]:
     cfg = get_config()
     buffer = FrameBuffer(
@@ -964,9 +1091,26 @@ async def event_stream(
             after=after,
         )
     )
+    preview_subscription: sl_output.OutputSubscription | None = None
+    preview_producer: asyncio.Task[None] | None = None
+    if session_ids:
+        preview_subscription = sl_output.HUB.subscribe(
+            session_ids,
+            max_frames=cfg.super_link_sse_output_queue_frames,
+        )
+        preview_producer = asyncio.create_task(
+            _produce_previews(
+                buffer,
+                preview_subscription,
+                space_id=space_id,
+                output_epoch=str(uuid.uuid4()),
+            )
+        )
     logger.info(
         "super-link stream opened space=%s user=%s", space_id, user_id
     )
+    observability.inc("sse.opened")
+    observability.inc("sse.active_total")
     try:
         while True:
             frame = await buffer.get()
@@ -974,9 +1118,18 @@ async def event_stream(
                 break
             yield frame
     finally:
+        observability.inc("sse.closed")
+        observability.inc("sse.active_total", -1)
         producer.cancel()
+        if preview_producer is not None:
+            preview_producer.cancel()
         with contextlib.suppress(asyncio.CancelledError):
             await producer
+        if preview_producer is not None:
+            with contextlib.suppress(asyncio.CancelledError):
+                await preview_producer
+        if preview_subscription is not None:
+            sl_output.HUB.unsubscribe(preview_subscription)
         await HUB.unsubscribe(subscription)
         await lease.release()
         logger.info(

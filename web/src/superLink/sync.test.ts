@@ -159,6 +159,41 @@ class FakeStream {
     this.callbacks.onControl(event, 'test')
   }
 
+  preview(
+    seq: number,
+    overrides: Partial<{
+      run_id: string
+      output_epoch: string
+      kind: string
+      text: string
+      block_key: string
+      status: string
+    }> = {},
+  ): void {
+    this.callbacks.onPreview?.({
+      schema_version: 1,
+      space_id: SPACE,
+      run_id: 'run-1',
+      output_epoch: 'out-1',
+      output_seq: seq,
+      kind: 'content',
+      member: { agent_id: 'member-1', agent_kind: 'subagent' },
+      turn: 1,
+      block_key: 'content|subagent|member-1|1',
+      text: 'live',
+      ...overrides,
+    })
+  }
+
+  reset(runIds: string[], reason = 'preview_overflow'): void {
+    this.callbacks.onOutputReset?.({
+      schema_version: 1,
+      space_id: SPACE,
+      run_ids: runIds,
+      reason,
+    })
+  }
+
   close(reason: 'eof' | 'error' | 'http', status?: number, retryAfterMs?: number): void {
     this.callbacks.onClose?.({ reason, status, retryAfterMs })
   }
@@ -311,21 +346,18 @@ test('snapshot opens the stream at its cursor and facts coalesce into one refres
   assert.equal(state.updatedAt, 150)
 })
 
-test('a superseded refresh is discarded whole and cannot rewind the cursor', async () => {
+test('a full replace supersedes an in-flight refresh and older data cannot land', async () => {
   const harness = makeHarness()
-  const stream = await boot(harness, snapshot(5))
+  const stream = await boot(harness, snapshot(5, { runs: [run('run-1')] }))
 
   stream.fact(6, ['runs'])
   harness.clock.advance(150)
   const slow = harness.take()
 
-  stream.fact(7, ['runs'])
-  harness.clock.advance(150)
-  const fast = harness.take()
+  harness.sync.returnToLatest()
+  const fresh = harness.take()
 
-  // The newer request resolves first; the older one lands afterwards and must
-  // not overwrite the newer state or move the cursor back to 6.
-  fast.resolve(snapshot(7, { runs: [run('run-7')] }))
+  fresh.resolve(snapshot(7, { runs: [run('run-7')] }))
   await harness.flush()
   slow.resolve(snapshot(6, { runs: [run('run-6')] }))
   await harness.flush()
@@ -333,6 +365,166 @@ test('a superseded refresh is discarded whole and cannot rewind the cursor', asy
   const state = harness.state()
   assert.equal(state.cursor, cursor(7))
   assert.deepEqual(state.runs.items.map((r) => r.run_id), ['run-7'])
+})
+
+test('a partial refresh does not consume a view it did not merge', async () => {
+  const harness = makeHarness()
+  const stream = await boot(harness, snapshot(5))
+
+  stream.fact(6, ['runs'])
+  harness.clock.advance(150)
+  harness.take().resolve(
+    snapshot(7, { runs: [run('run-7')], pending: [pending('control-7')] }),
+  )
+  await harness.flush()
+
+  assert.equal(harness.state().cursor, cursor(6), 'the partial refresh must not consume event 7')
+  assert.deepEqual(harness.state().pendingInterventions.items, [])
+
+  // The transport delivers event 7 after the snapshot response. It still has
+  // to invalidate interventions even though the snapshot was already at 7.
+  stream.fact(7, ['interventions'])
+  harness.clock.advance(150)
+  harness.take().resolve(
+    snapshot(7, { runs: [run('run-7')], pending: [pending('control-7')] }),
+  )
+  await harness.flush()
+
+  assert.deepEqual(
+    harness.state().pendingInterventions.items.map((item) => item.control_id),
+    ['control-7'],
+  )
+  assert.equal(harness.state().cursor, cursor(7))
+})
+
+test('a refresh hinted during another refresh is queued, not dropped', async () => {
+  const harness = makeHarness()
+  const stream = await boot(harness, snapshot(5))
+
+  stream.fact(6, ['runs'])
+  harness.clock.advance(150)
+  const first = harness.take()
+
+  stream.fact(7, ['deliveries'])
+  harness.clock.advance(150)
+  assert.equal(harness.calls.length, 2, 'the second hint waits for the in-flight refresh')
+
+  first.resolve(
+    snapshot(7, { runs: [run('run-7')], deliveries: [delivery('msg-7')] }),
+  )
+  await harness.flush()
+  assert.deepEqual(harness.state().runs.items.map((r) => r.run_id), ['run-7'])
+  assert.deepEqual(harness.state().deliveries.items, [], 'deliveries were not in this request')
+
+  harness.clock.advance(0)
+  assert.equal(harness.calls.length, 3, 'the queued invalidation starts a follow-up')
+  const second = harness.take()
+  assert.equal(second.query.min_cursor, cursor(7))
+  second.resolve(
+    snapshot(7, { runs: [run('run-7')], deliveries: [delivery('msg-7')] }),
+  )
+  await harness.flush()
+
+  assert.deepEqual(
+    harness.state().deliveries.items.map((item) => item.message_id),
+    ['msg-7'],
+  )
+})
+
+test('returnToLatest rejects a stale snapshot and keeps history and pending updates', async () => {
+  const harness = makeHarness()
+  const stream = await boot(
+    harness,
+    snapshot(5, { runs: [run('run-5')], runsNext: 'run-5', runsTotal: 2 }),
+  )
+
+  const loading = harness.sync.loadMore('runs')
+  harness.take().resolve(
+    snapshot(5, { runs: [run('run-1')], runsTotal: 2, runsNext: null }),
+  )
+  await loading
+  await harness.flush()
+  assert.equal(harness.state().history, true)
+
+  stream.fact(6, ['runs'])
+  harness.clock.advance(150)
+  assert.equal(harness.calls.length, 2, 'history defers the live refresh')
+
+  const latest = harness.sync.returnToLatest()
+  const request = harness.take()
+  assert.equal(request.query.min_cursor, cursor(6))
+
+  stream.fact(7, ['runs'])
+  request.resolve(snapshot(6, { runs: [run('run-6')] }))
+  await latest
+  await harness.flush()
+
+  const state = harness.state()
+  assert.equal(state.history, true, 'the reader stays in history while the snapshot is stale')
+  assert.equal(state.hasUpdates, true)
+  assert.equal(state.cursor, cursor(7))
+  assert.deepEqual(state.runs.items.map((r) => r.run_id), ['run-5', 'run-1'])
+  assert.equal(state.error, '状态仍在更新，请稍后重试查看最新记录')
+
+  const retry = harness.sync.returnToLatest()
+  harness.take().resolve(snapshot(7, { runs: [run('run-7')] }))
+  await retry
+  await harness.flush()
+
+  assert.equal(harness.state().history, false)
+  assert.deepEqual(harness.state().runs.items.map((r) => r.run_id), ['run-7'])
+})
+
+test('terminal auth invalidation ignores a late successful snapshot', async () => {
+  const harness = makeHarness()
+  const stream = await boot(harness, snapshot(5, { runs: [run('run-5')] }))
+
+  stream.fact(6, ['runs'])
+  harness.clock.advance(150)
+  const request = harness.take()
+
+  stream.control('sl.auth_required')
+  assert.equal(harness.state().status, 'auth_required')
+
+  request.resolve(snapshot(7, { runs: [run('run-7')] }))
+  await harness.flush()
+
+  const state = harness.state()
+  assert.equal(state.status, 'auth_required')
+  assert.deepEqual(state.runs.items.map((r) => r.run_id), ['run-5'])
+})
+
+test('a live refresh in flight cannot rewrite a list after history begins', async () => {
+  const harness = makeHarness()
+  const stream = await boot(
+    harness,
+    snapshot(5, { runs: [run('run-3')], runsNext: 'run-3', runsTotal: 2 }),
+  )
+
+  stream.fact(6, ['runs'])
+  harness.clock.advance(150)
+  const liveRefresh = harness.take()
+
+  const loading = harness.sync.loadMore('runs')
+  const older = harness.take()
+  older.resolve(snapshot(5, { runs: [run('run-1')], runsTotal: 2, runsNext: null }))
+  await loading
+  await harness.flush()
+  assert.deepEqual(
+    harness.state().runs.items.map((r) => r.run_id),
+    ['run-3', 'run-1'],
+  )
+
+  liveRefresh.resolve(
+    snapshot(6, { runs: [run('run-6')], runsTotal: 3, runsNext: 'run-6' }),
+  )
+  await harness.flush()
+
+  const state = harness.state()
+  assert.equal(state.history, true)
+  assert.equal(state.hasUpdates, true)
+  assert.deepEqual(state.runs.items.map((r) => r.run_id), ['run-3', 'run-1'])
+  assert.equal(harness.calls.length, 3, 'the deferred snapshot is neither applied nor refetched')
 })
 
 test('a latest response older than the stream cursor is discarded and retried', async () => {
@@ -469,6 +661,165 @@ test('resync_required stops the old stream and reopens at the new cursor', async
   assert.equal(harness.state().status, 'live')
 })
 
+test('a resync releases an abandoned refresh so later facts still refresh', async () => {
+  const harness = makeHarness()
+  const first = await boot(harness, snapshot(5, { runs: [run('run-5')] }))
+
+  first.fact(6, ['runs'])
+  harness.clock.advance(150)
+  assert.equal(harness.calls.length, 2)
+  const abandoned = harness.take()
+
+  first.control('sl.resync_required')
+  harness.take().resolve(snapshot(7, { runs: [run('run-7')] }))
+  await harness.flush()
+
+  const second = harness.streams.at(-1)
+  assert.ok(second)
+  second.open()
+  assert.equal(harness.state().status, 'live')
+
+  // The abandoned refresh is still waiting, but its ownership was released.
+  second.fact(8, ['runs'])
+  harness.clock.advance(150)
+  assert.equal(harness.calls.length, 4, 'the abandoned refresh must not block the new cycle')
+  harness.take().resolve(snapshot(8, { runs: [run('run-8')] }))
+  await harness.flush()
+  assert.deepEqual(harness.state().runs.items.map((r) => r.run_id), ['run-8', 'run-7'])
+
+  abandoned.resolve(snapshot(6, { runs: [run('run-6')] }))
+  await harness.flush()
+  assert.deepEqual(harness.state().runs.items.map((r) => r.run_id), ['run-8', 'run-7'])
+  assert.equal(harness.state().cursor, cursor(8))
+})
+
+test('an error from a superseded refresh cannot close the healthy stream', async () => {
+  const harness = makeHarness()
+  const stream = await boot(harness, snapshot(5, { runs: [run('run-5')] }))
+
+  stream.fact(6, ['runs'])
+  harness.clock.advance(150)
+  const abandoned = harness.take()
+
+  const latest = harness.sync.returnToLatest()
+  harness.take().resolve(snapshot(7, { runs: [run('run-7')] }))
+  await latest
+  await harness.flush()
+  assert.equal(harness.state().status, 'live')
+  assert.equal(harness.calls.length, 3)
+
+  abandoned.reject(Object.assign(new Error('expired cursor'), { status: 410 }))
+  await harness.flush()
+
+  const state = harness.state()
+  assert.equal(state.status, 'live')
+  assert.deepEqual(state.runs.items.map((r) => r.run_id), ['run-7'])
+  assert.equal(harness.calls.length, 3, 'a superseded failure must not start a resync')
+  assert.equal(stream.stopped, false)
+
+  stream.fact(8, ['runs'])
+  harness.clock.advance(150)
+  assert.equal(harness.calls.length, 4, 'the superseded request does not block later refreshes')
+  harness.take().resolve(snapshot(8, { runs: [run('run-8')] }))
+  await harness.flush()
+  assert.equal(harness.state().status, 'live')
+  assert.deepEqual(harness.state().runs.items.map((r) => r.run_id), ['run-8', 'run-7'])
+})
+
+test('a resync releases an abandoned returnToLatest so later facts still refresh', async () => {
+  const harness = makeHarness()
+  const first = await boot(harness, snapshot(5, { runs: [run('run-5')] }))
+
+  harness.sync.returnToLatest()
+  const abandoned = harness.take()
+
+  first.control('sl.resync_required')
+  harness.take().resolve(snapshot(7, { runs: [run('run-7')] }))
+  await harness.flush()
+
+  const second = harness.streams.at(-1)
+  assert.ok(second)
+  second.open()
+  assert.equal(harness.state().status, 'live')
+
+  // The abandoned full request is still waiting, but its ownership was released.
+  second.fact(8, ['runs'])
+  harness.clock.advance(150)
+  assert.equal(harness.calls.length, 4, 'the abandoned full request must not block the new cycle')
+  harness.take().resolve(snapshot(8, { runs: [run('run-8')] }))
+  await harness.flush()
+  assert.deepEqual(harness.state().runs.items.map((r) => r.run_id), ['run-8', 'run-7'])
+
+  abandoned.resolve(snapshot(6, { runs: [run('run-6')] }))
+  await harness.flush()
+  assert.deepEqual(harness.state().runs.items.map((r) => r.run_id), ['run-8', 'run-7'])
+  assert.equal(harness.state().status, 'live')
+  assert.equal(harness.state().cursor, cursor(8))
+})
+
+test('a late error from an abandoned full request cannot close the resynced stream', async () => {
+  for (const status of [410, 404]) {
+    const harness = makeHarness()
+    const first = await boot(harness, snapshot(5, { runs: [run('run-5')] }))
+
+    harness.sync.returnToLatest()
+    const abandoned = harness.take()
+
+    first.control('sl.resync_required')
+    harness.take().resolve(snapshot(7, { runs: [run('run-7')] }))
+    await harness.flush()
+
+    const second = harness.streams.at(-1)
+    assert.ok(second)
+    second.open()
+    assert.equal(harness.state().status, 'live')
+
+    abandoned.reject(Object.assign(new Error('stale full request'), { status }))
+    await harness.flush()
+
+    assert.equal(harness.state().status, 'live', `status ${status} must be ignored`)
+    assert.deepEqual(harness.state().runs.items.map((r) => r.run_id), ['run-7'])
+    assert.equal(
+      harness.calls.length,
+      3,
+      `status ${status} must not start another snapshot request`,
+    )
+    assert.equal(second.stopped, false)
+  }
+})
+
+test('a failed full replace wakes the superseded refresh scopes after reconnect', async () => {
+  const harness = makeHarness()
+  const first = await boot(harness, snapshot(5, { runs: [run('run-5')] }))
+
+  first.fact(6, ['runs'])
+  harness.clock.advance(150)
+  const abandoned = harness.take()
+
+  harness.sync.returnToLatest()
+  harness.take().reject(Object.assign(new Error('busy'), { status: 503 }))
+  await harness.flush()
+
+  harness.clock.advance(0)
+  const second = harness.streams.at(-1)
+  assert.ok(second)
+  assert.notEqual(second, first)
+  second.open()
+  assert.equal(harness.state().status, 'live')
+
+  // The abandoned refresh lands after the reconnect. It cannot apply its
+  // snapshot, but its scope must re-arm the current cycle.
+  abandoned.resolve(snapshot(6, { runs: [run('run-6')], runsTotal: 2 }))
+  await harness.flush()
+  harness.clock.advance(0)
+  assert.equal(harness.calls.length, 4, 'the re-queued scope must trigger a refresh')
+  harness.take().resolve(snapshot(6, { runs: [run('run-6')], runsTotal: 2 }))
+  await harness.flush()
+
+  assert.equal(harness.state().status, 'live')
+  assert.deepEqual(harness.state().runs.items.map((r) => r.run_id), ['run-6', 'run-5'])
+})
+
 test('EOF reconnects from the last cursor and replay restores offline changes', async () => {
   const harness = makeHarness()
   const first = await boot(harness, snapshot(5, { runs: [run('run-1')] }))
@@ -567,6 +918,108 @@ test('stop releases the stream and ignores late facts and snapshots', async () =
   assert.equal(harness.state().cursor, cursorBefore)
   assert.equal(harness.state().status, 'stopped')
   assert.equal(harness.calls.length, 1)
+})
+
+test('previews never advance the durable cursor and coalesce into one emit', async () => {
+  const harness = makeHarness()
+  const stream = await boot(
+    harness,
+    snapshot(5, { runs: [run('run-1', 'running')], activeRunIds: ['run-1'] }),
+  )
+  const before = harness.states.length
+
+  stream.preview(1, { text: 'a' })
+  stream.preview(2, { text: 'b' })
+  assert.equal(harness.states.length, before, 'previews wait for the coalescing window')
+  harness.clock.advance(79)
+  assert.equal(harness.states.length, before)
+  harness.clock.advance(1)
+  assert.equal(harness.states.length, before + 1, 'bursts collapse into one state emit')
+
+  const state = harness.state()
+  assert.equal(state.cursor, cursor(5))
+  assert.equal(state.seq, 5)
+  assert.equal(state.hasUpdates, false)
+  assert.deepEqual(state.runs.items.map((r) => r.run_id), ['run-1'])
+  assert.equal(harness.calls.length, 1, 'previews never trigger a snapshot read')
+  assert.equal(state.live.runs['run-1'].lastSeq, 2)
+  assert.equal(state.live.runs['run-1'].blocks[0].text, 'ab')
+})
+
+test('a closed connection clears previews before reconnecting', async () => {
+  const harness = makeHarness()
+  const first = await boot(harness, snapshot(5))
+  first.preview(1)
+  harness.clock.advance(80)
+  assert.equal(harness.state().live.runs['run-1'].blocks[0].text, 'live')
+
+  first.close('eof')
+  assert.deepEqual(harness.state().live.runs, {})
+  assert.equal(harness.state().status, 'reconnecting')
+})
+
+test('previews from a replaced connection are discarded by generation and token', async () => {
+  const harness = makeHarness()
+  const first = await boot(harness, snapshot(5))
+  first.close('eof')
+  harness.clock.advance(0)
+  const second = harness.streams.at(-1)
+  assert.ok(second)
+  assert.notEqual(second, first)
+  second.open()
+
+  first.preview(1, { text: 'stale' })
+  harness.clock.advance(80)
+  assert.equal(harness.state().live.runs['run-1'], undefined)
+
+  second.preview(1, { text: 'fresh' })
+  harness.clock.advance(80)
+  assert.equal(harness.state().live.runs['run-1'].blocks[0].text, 'fresh')
+})
+
+test('a resync clears previews before rebuilding from a snapshot', async () => {
+  const harness = makeHarness()
+  const stream = await boot(
+    harness,
+    snapshot(5, { runs: [run('run-1', 'running')], activeRunIds: ['run-1'] }),
+  )
+  stream.preview(1)
+  harness.clock.advance(80)
+  assert.ok(harness.state().live.runs['run-1'])
+
+  stream.control('sl.resync_required')
+  assert.deepEqual(harness.state().live.runs, {})
+
+  harness.take().resolve(
+    snapshot(7, { runs: [run('run-1', 'running')], activeRunIds: ['run-1'] }),
+  )
+  await harness.flush()
+  assert.equal(harness.state().status, 'live')
+  assert.equal(harness.state().cursor, cursor(7))
+  assert.deepEqual(harness.state().live.runs, {})
+})
+
+test('acknowledgeArchive releases terminal previews and clears repair flags', async () => {
+  const terminalHarness = makeHarness()
+  const terminalStream = await boot(terminalHarness, snapshot(5))
+  terminalStream.preview(1, { text: 'body' })
+  terminalStream.preview(2, { kind: 'terminal', status: 'completed', text: '' })
+  terminalHarness.clock.advance(80)
+  assert.equal(terminalHarness.state().live.runs['run-1'].active, false)
+
+  terminalHarness.sync.acknowledgeArchive('run-1')
+  assert.equal(terminalHarness.state().live.runs['run-1'], undefined)
+
+  const repairHarness = makeHarness()
+  const repairStream = await boot(repairHarness, snapshot(5))
+  repairStream.preview(1)
+  repairStream.preview(4)
+  repairHarness.clock.advance(80)
+  assert.equal(repairHarness.state().live.runs['run-1'].needsArchive, true)
+
+  repairHarness.sync.acknowledgeArchive('run-1')
+  assert.equal(repairHarness.state().live.runs['run-1'].needsArchive, false)
+  assert.equal(repairHarness.state().live.runs['run-1'].blocks[0].text, 'live')
 })
 
 test('a fact never changes control state before the snapshot confirms it', async () => {

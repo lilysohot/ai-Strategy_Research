@@ -2,12 +2,12 @@
 
 | 项目 | 内容 |
 |---|---|
-| 版本 / 日期 | v0.9 · 2026-11-20（SSE-T04 前端关键状态闭环完成） |
-| 状态 | 有效；基础通信、独立入口与控制面板的实施证据见 §12—§19；SSE-T01/T02/T03/T04 完成、T05—T07 待开始；完整发布及真实研究业务验收未完成 |
+| 版本 / 日期 | v0.13 · 2026-11-21（SSE-T06 执行并收口，A10 代理 blocked） |
+| 状态 | 有效；基础通信、独立入口与控制面板的实施证据见 §12—§19；SSE-T01—T06 完成（T06 含 blocked/未覆盖项），T07 待开始；完整发布及真实研究业务验收未完成 |
 | 需求依据 | [产品需求 PR-SL-01](../product-requirements.md#24-super-link-独立协作模式2026-11-07)；[专项需求](../design/super-link-prd.md) SL-01—SL-22、SL-SSE-01—05 |
 | 技术依据 | [基础技术框架](../design/super-link-technical-design.md) |
 | 本轮目标 | 在保护既有模式的前提下，建立空间级可靠状态同步，再接通运行输出展示 |
-| 实施边界 | §12—§19 保存历史实现与启停证据；§20 是当前 SSE 执行清单，T01 仅完成设计，不代表 SSE 已实现；最近启停记录为 §18，本次未重新探测或变更服务 |
+| 实施边界 | §12—§19 保存历史实现与启停证据；§20 是当前 SSE 执行清单，T01—T06 已实施并留证，T07 待开始；T06 仅使用隔离服务，未变更现有 8000/5173/4174 与共享 Redis，现有服务最近启停记录仍为 §18 |
 
 ## 1. 首版范围与完成定义
 
@@ -686,9 +686,11 @@ Team/Single 的可见运行输出。设计与遗漏分析见[SSE 设计稿](../d
 
 SSE-T01 已完成，实施契约见[技术框架 §11](../design/super-link-technical-design.md#11-sse-接入边界2026-11-20)。
 T02 持久事件与 T03 快照/SSE 接口已通过 SQLite 与隔离 PG 验收；T04 前端订阅与状态
-同步已通过单测、类型检查与生产构建。现可进入 T05，接通真实运行输出；默认参数及首版
-单所有者范围已登记。改变产品行为或扩大部署范围时另行讨论。文档登记不启动服务、
-不迁移业务库。
+同步已复核收口。T05 已按规格接通 Team/Single 可见输出、成员归属、缺片 reset 与归档
+衔接并复核收口。T06 已在隔离环境完成真实浏览器、真实 Worker、故障注入、观测与普通
+模式回归：A03/A04/A07/A09 通过，A05 部分覆盖，A10 因无代理 `blocked`，见 §20.12。
+默认参数及首版单所有者范围已登记。改变产品行为或扩大部署范围时另行讨论。文档登记
+不启动现有服务、不迁移业务库。
 
 ### 20.2 执行任务及依赖
 
@@ -699,9 +701,9 @@ T02 持久事件与 T03 快照/SSE 接口已通过 SQLite 与隔离 PG 验收；
 | SSE-T01 契约与来源盘点 | 无 | 核对 `server/super_link/`、审批、派发和运行收尾的状态写入点；确定事件目录、身份、版本、快照、游标及错误响应 | 保存来源到事件的完整映射；确定并发提交安全方案、快照一致性、权威写入失败语义和首版部署拓扑；给出请求/响应样例与异常路径 | 设计完成，见 §20.7 |
 | SSE-T02 持久事件与可靠发布 | T01 | 独立事件存储/可选迁移、业务写入适配、发布与补偿读取；核对现有 outbox 复用边界 | 覆盖 HTTP 和后台来源；状态与事件同事务或有明确可恢复转换；晚提交、回滚、重复、Redis 故障与重启不漏关键事实 | 实现完成，SQLite 与隔离 PG 验收通过，见 §20.8 |
 | SSE-T03 空间快照与 SSE 接口 | T02 | 独立空间快照/订阅接口、补读、鉴权、心跳、连接释放和有界缓冲 | 快照切流无空隙；重复去重、游标过期重新同步；Run 终态不关闭空间观察；满足约定拓扑下的路由与权限隔离 | 实现完成，SQLite 与隔离 PG 验收通过，见 §20.9 |
-| SSE-T04 前端关键状态闭环 | T03 | Super-link 独立订阅与状态管理，审批/控制/交付同步；检查 `SuperLinkView.vue` 及现有 `sse.ts` 的复用边界 | 页面离线期间完成交接后可准确恢复；保留历史分页、未提交输入、幂等和版本冲突；旧空间迟到事件不污染新空间；普通模式不变 | 实现完成，前端单测/类型/构建通过，未做真实浏览器验收，见 §20.10 |
-| SSE-T05 真实运行输出适配 | T04 | Worker/Bridge/Orchestrator/Relay 输出适配，Team 成员归属，实时与归档内容衔接 | Team 与 Single 实际运行内容可实时展示；缺片修复、最终文本对齐；无思考流也正常；按 T01 拓扑验证跨进程/实例来源，不重复执行工具 | 待开始 |
-| SSE-T06 故障、兼容与观测验收 | T05；定向测试随 T02—T05 同步完成 | 后端/前端针对性测试、隔离 PG/Redis、真实 Worker、浏览器与代理链路；连接和发布指标 | §20.4 场景有证据；运行展示和业务执行故障可区分；队列/连接有界；普通 single/team、审批、停止和连续性无回归 | 待开始 |
+| SSE-T04 前端关键状态闭环 | T03 | Super-link 独立订阅与状态管理，审批/控制/交付同步；检查 `SuperLinkView.vue` 及现有 `sse.ts` 的复用边界 | 页面离线期间完成交接后可准确恢复；保留历史分页、未提交输入、幂等和版本冲突；旧空间迟到事件不污染新空间；普通模式不变 | 复核通过并收口（2026-11-20）；四轮复核共 10 项状态竞态已修复，前端单测 145 passed、类型/构建通过；未做真实浏览器验收，见 §20.10 |
+| SSE-T05 真实运行输出适配 | T04 | Worker/Bridge/Orchestrator/Relay 输出适配，Team 成员归属，实时与归档内容衔接 | Team 与 Single 实际运行内容可实时展示；缺片修复、最终文本对齐；无思考流也正常；按 T01 拓扑验证跨进程/实例来源，不重复执行工具 | 复核通过，已收口（2026-11-21），见 §20.11 |
+| SSE-T06 故障、兼容与观测验收 | T05；定向测试随 T02—T05 同步完成 | 后端/前端针对性测试、隔离 PG/Redis、真实 Worker、浏览器与代理链路；连接和发布指标 | §20.4 场景有证据；运行展示和业务执行故障可区分；队列/连接有界；普通 single/team、审批、停止和连续性无回归 | 已执行并收口（2026-11-21）：A03/A04/A07/A09 通过，A05 部分覆盖，A10 代理 blocked，见 §20.12 |
 | SSE-T07 发布准备与启用核对 | T06 | 核对业务库版本、控制迁移与 SSE 迁移顺序、配置、备份、兼容回退与发布说明 | 隔离环境验证升级及保留数据的回退；形成具体部署清单。准备完成与实际启用分别记录，启用按用户届时指令执行 | 待开始 |
 
 T01 不要求新增一个独立契约文档：正式决定集中补入技术框架 §11，本设计稿保留依据。
@@ -723,7 +725,8 @@ T02—T05 每完成一项先跑相关回归再推进；T06 汇总端到端和故
 
 ### 20.4 验收矩阵
 
-以下均为计划场景，尚未执行，不使用历史通信测试数量替代本批证据。
+以下场景已执行；T06 负责部分的结果与限制见 §20.12。A10 因无可用代理标 `blocked`，
+不标为通过；未使用历史通信测试数量替代本批证据。
 
 | 编号 | 场景与预期结果 | 负责任务 |
 |---|---|---|
@@ -757,8 +760,9 @@ T02—T05 每完成一项先跑相关回归再推进；T06 汇总端到端和故
 
 需求、设计依据、模块接口、任务依赖及验收场景已经建立。T01 已将事件目录、事务提交、
 游标、快照和部署范围定为实施契约，T02 完成持久事件账本与来源接线，T03 完成快照与
-SSE 接口，T04 完成前端订阅、状态合并与页面接入；具备启动 T05 的条件，T05—T07 尚未
-实施或验证，不具备直接正式启用的条件。后续进度只更新本节及对应实现证据。
+SSE 接口，T04 完成前端订阅、状态合并与页面接入，T05 完成真实运行输出适配并复核收口，
+T06 完成隔离环境下的故障、兼容与观测验收。T07 尚未实施；T06 仍存在 A10 blocked 与
+未覆盖项，不具备直接正式启用的条件。后续进度只更新本节及对应实现证据。
 
 ### 20.7 SSE-T01 完成记录（2026-11-20）
 
@@ -870,17 +874,60 @@ SSE 已可正式启用。
 | 帧解析复用 | 新增 `utils/sseFrames.ts`（`extractFrames`/`parseFrame`/`backoffDelay`/`sleep`），`sse.ts` 改为导入；`parseFrame` 增加 `event`/`id`，`openRunStream` 的游标、终态与重试行为不变 | `sseFrames.test.ts` 6 项；既有运行流与普通模式测试通过 |
 | 快照 API | `api/superLink.ts` 增加 `SnapshotQuery`/`SnapshotPage`/`SpaceSnapshot`/`snapshot()`，完整映射 6 个查询参数；`Space` 补 `delivery_cutoff`，参与方补 `available` | 类型检查通过；未新增后端字段 |
 | 空间事件流 | `superLink/stream.ts` 单次 fetch；bearer、`Accept: text/event-stream`、`Cache-Control: no-cache`；显式不设 `Last-Event-ID`；非 2xx 上报 status 与 `Retry-After`；只分发事实与三个控制帧；主动停止不回调 close | `stream.test.ts` 5 项；未验证真实代理、心跳与浏览器链路（T06） |
-| 同步状态机 | `superLink/sync.ts`：快照建流、事实 schema/space/epoch/seq 校验去重、`invalidate` 聚合 150ms、请求序号/游标单调/空间代次三重旧响应丢弃、`mergeFirstPage` 保留历史、待审批整页替换、`loadMore` 追加去重、`returnToLatest` 全量重建、`sl.resync_required`/410/400/epoch 重同步、401/403、404、429、8 次失败进入 `unavailable`、`stop()` 释放 | `sync.test.ts` 15 项；新增“加载更早失败不进入历史”用例；未覆盖真实网络时序 |
+| 同步状态机 | `superLink/sync.ts`：快照建流、事实 schema/space/epoch/seq 校验去重、`invalidate` 聚合 150ms、请求序号/游标单调/空间代次三重旧响应丢弃、`mergeFirstPage` 保留历史、待审批整页替换、`loadMore` 追加去重、`returnToLatest` 全量重建、`sl.resync_required`/410/400/epoch 重同步、401/403、404、429、8 次失败进入 `unavailable`、`stop()` 释放 | `sync.test.ts` 25 项；四轮复核共新增 10 项竞态回归；未覆盖真实网络时序 |
 | 页面接入 | 新增 `superLink/useSpaceSync.ts`；`SuperLinkView.vue` 详情改为快照/SSE 单一数据源，移除 5 秒轮询；列表页保留旧 REST 加载与分页；新增同步状态条、历史提示与“查看最新”；`more('runs'|'deliveries')` 走 `loadMore`；离页、路由离开与切空间调用 `stop()` | 类型检查与生产构建通过；未做浏览器手工验收（T06） |
 | 控制面板 | `SuperLinkControls.vue` 新增可选 `pending`/`pendingTotal`/`activeRunIds`/`actions`/`actionsNext`；有 props 时待审批、活动运行与恢复审计均以父级快照状态为准，审计“更早”走 `loadMore('actions')`；`/interventions` 降为 30 秒低频兜底；审批、控制、恢复与补充指令提交后 emit `changed`，父级 `refreshNow()` 由快照确认 | 保留幂等键、`expected_version`、`sessionStorage` 待确认请求与“停止需真实收尾”；未改后端 |
 | 历史与分页 | `loadMore` 成功才进入 `history`；失败只提示、不把页面困在历史；历史模式不自动插入新项，事件只置 `hasUpdates`；`refreshNow` 合并全部视图但不退出历史 | 单测覆盖历史合并、失败回退、跨替换丢弃与待审批替换 |
 | 未提交输入 | 审批组件按 `control_id` 复用，`steerText` 按 `run_id` 保留；同步刷新不重建 `SuperLinkControls`（key 仍为 `space_id`） | 无组件级自动化测试，列入 T06 浏览器验收 |
 
-测试结果：`cd web && npm test` 135 passed；`npm run typecheck` 通过；`npm run build`
+测试结果：`cd web && npm test` 145 passed；`npm run typecheck` 通过；`npm run build`
 通过（仅有既有 chunk 体积提示）。后端契约复核
 `uv run pytest tests/test_super_link_stream.py -q -p no:cacheprovider` 26 passed。
 按用户复核口径，本批未重复执行全量后端回归与隔离 PG。
 
+复核竞态（2026-11-20，用户报告 5 项，均已修复并回归）：
+
+1. **局部刷新提前推进游标**：`state.cursor/seq` 只表示事件消费位置，局部
+   `applyRefresh` 不再推进，仅用内部 `appliedSeq` 记录已合并的最高快照版本；未合并视图
+   的迟到事实仍会触发刷新。
+2. **并发刷新丢失失效标记**：scoped 刷新串行化，同一时间只有一个请求在途，新失效排队；
+   被全量替换取代的请求在替换序号未变时重新入队。
+3. **“查看最新”回退游标**：`returnToLatest` 请求带 `min_cursor`，响应再校验
+   `parsed.seq` 不早于 `state.seq`/`appliedSeq`；旧快照返回时保持历史、保留未合并失效，
+   只置更新提示。
+4. **迟到快照覆盖鉴权终止**：`shutdown()` 递增代次，作废所有在途快照的成功/失败回调与
+   流回调；owner 标记避免旧 `finally` 清除新请求标志。
+5. **实时刷新改写历史列表**：刷新落地前重新检查 `history`，历史开始后返回的响应只重新
+   排队并置 `hasUpdates`，不追加或覆盖历史列表。
+
+第二轮复核（2026-11-20）补齐“请求失去处理权后不得影响当前同步周期”的规则：
+
+6. **重同步未释放旧刷新**：`loadInitial`、`requestResync`、`returnToLatest` 开始时统一
+   调用 `invalidateRefresh()`，递增 `refreshOwner` 并释放 `refreshInFlight`；旧请求的
+   `finally` 因 owner 不匹配不再清除新周期标志，重同步成功后新事实可正常刷新。
+7. **被取代请求的迟到错误干扰新状态**：`loadRefresh` 的成功与失败路径都校验
+   `request === latestFullRequest` 与 owner；`returnToLatest` 成功后才返回的 410 不再关闭
+   正常连接或触发重同步，仅在替换未发生时才把失效标记重新排队。
+
+第三轮复核（2026-11-20）把同一规则覆盖到全量快照请求：
+
+8. **旧“查看最新”阻塞重同步后的刷新**：新增 `claimReplace()`，`loadInitial`、
+   `returnToLatest`、`requestResync` 接管时递增 `replaceOwner`、作废局部刷新并释放旧
+   `replaceInFlight`；`runResync` 持有并校验自己的 owner。被放弃的全量请求即使一直
+   挂起，也不再阻塞新流上的刷新。
+9. **旧全量请求的迟到错误关闭健康连接**：首次加载、“查看最新”与重同步的成功、错误与
+   `finally` 都校验请求编号与 owner；被取代请求迟到的 410 不再触发重同步，404 不再
+   改写 `not_found`，成功响应也不覆盖新状态。
+
+第四轮复核（2026-11-20）补齐全量替换失败后的唤醒：
+
+10. **失效重新入队后未触发刷新**：全量 B 失败、重连完成后，被取代的刷新 A 迟到返回，
+    将 scope 重新入队，但其旧 `finally` 已正确跳过调度。新增 `wakeRefresh()`：仅在当前
+    周期为 `live` 且无 resync/replace/refresh 在途时安排 0ms 刷新；接管进行中由接管者
+    负责，历史模式只置更新提示。成功与失败两条被取代分支都在 `requeue` 后唤醒。
+
+对应回归共 10 项已加入 `sync.test.ts`（共 25 项）。T04 已复核通过并收口；正式启用仍以
+T06 真实链路验收为准。
 限制：未启动本机服务，未连接或迁移业务库；真实浏览器、反向代理、多标签页与真实
 Worker 链路留待 T06；前端未新增组件级测试，历史与未提交输入的保持依赖状态机单测
 和静态检查。T04 完成不表示 SSE 可正式启用，启用仍需 T06 真实链路验收。
@@ -890,3 +937,92 @@ Worker 链路留待 T06；前端未新增组件级测试，历史与未提交输
 
 下一项为 **SSE-T05 真实运行输出适配**：在不改变本批协议与游标语义的前提下，接通
 Team/Single 的可见运行输出与归档内容衔接。
+
+### 20.11 SSE-T05 完成记录（2026-11-20，待复核）
+
+按 [spec.md](../spec/super-link-sse-t05/spec.md) 与
+[tasks.md](../spec/super-link-sse-t05/tasks.md) 实施真实运行输出适配。未改变空间事实
+游标、快照协议、`openRunStream` 与普通模式运行流；未启动本机服务、未连接或迁移业务库。
+
+| 交付 | 已实现内容 | 证据与限制 |
+|---|---|---|
+| 预览映射 | 新增 `server/super_link/output.py`：`assistant_delta` 拆成 thinking/content 帧，`tool_started`/`tool_finished` 合并到工具块，warning detail 作为 notice，`RUN_COMPLETED/FAILED/STOPPED` 作为 terminal；重新 `redact_deep`，单帧 4096 字符，不复制 `output` 全量结果，terminal 不含 `final_answer` | `tests/test_super_link_output.py` 覆盖映射、脱敏、拆帧、无思考、Single 空成员与终态；反馈帧只用于展示 |
+| 进程内 Hub | `RunOutputHub` 按参与会话订阅；`OutputSubscription` 有界队列，溢出时清空待发预览并合并为 `sl.output_reset`；发布同步非阻塞，未订阅会话零构造 | 单测覆盖会话隔离、溢出合并、reset 后新帧与退订唤醒；仅进程内，单所有者 |
+| 空间 SSE | `stream.py` 增加 `sl.run.preview`/`sl.output_reset`、`FrameBuffer.put_preview`（最多占缓冲一半）与独立预览生产者；每连接新 `output_epoch`，按 Run 递增 `output_seq`；reset 优先；预览写不进缓冲时丢弃并等待下一次 reset | 与 T03 测试合计 `tests/test_super_link_stream.py` 通过（含无 `id`、reset 顺序、其他会话不可见、为事实预留缓冲） |
+| 路由与编排 | `management.participant_session_ids()`；events 路由建连时读取参与者会话；`orchestrator._publish` 保留原订阅者扇出后旁路发布预览 | 单测验证原订阅者帧不变、仅订阅会话收到预览；未改派发、工具执行或业务写入路径 |
+| 前端状态 | 新增 `live.ts`：epoch、每 Run 序号、块身份、成员归属、终态、缺片 `needsArchive`、500,000 字符截断与归档过滤；`stream.ts` 分发预览/reset；`sync.ts` 80ms 合并 emit、关闭/重同步/停止清空、旧连接帧按代次与令牌丢弃，预览不推进游标/`hasUpdates` | `live.test.ts` 15 项、`stream.test.ts` 新增分发 1 项、`sync.test.ts` 新增集成 5 项 |
+| 页面衔接 | `RunDetailView.vue` 可选 `live`/`liveActive`；实时块按成员展示、内容 Markdown 清洗、思考纯文本、工具状态；归档已有成员/轮次自动隐藏；`liveActive` 负责轮询并在结束后立即重读归档，加载完成 emit `archiveLoaded`；`SuperLinkView.vue` 抽屉计算并传入，归档确认调用 `acknowledgeArchive`；普通模式未传新属性，行为不变 | 类型检查通过；未做组件级浏览器交互验收（T06） |
+
+复核修复（2026-11-21）：
+
+| 问题 | 修复 | 回归 |
+|---|---|---|
+| P1 普通模式轮询被 Boolean 属性默认值关闭 | `RunDetailView` 增加显式 `liveMode`（默认 false），轮询由 `shouldPollRunDetail()` 决定，不再用 `liveActive === undefined` 推断模式；SuperLink 抽屉显式传入 `live-mode` | 纯函数单测覆盖普通模式 `liveActive=false` 仍轮询；SFC 编译探针确认 `liveMode` 默认 false |
+| P2 首个预览抹掉先到的缺片标记 | `applyPreview` 在 epoch 从 null 初始化时保留 reset 登记的 Run；仅真正切换 epoch 时清空 | 新增 reset→首帧回归，`needsArchive` 保持 true |
+| P2 缓冲恢复后 reset 滞留 | `FrameBuffer.wait_preview_space()` 由 `get()` 释放容量唤醒；预览生产者有待发 reset 时等待容量而非只等新输出，缓冲关闭即退出 | 新增流测试：丢弃第二帧后仅排空缓冲也必达 reset |
+| P2 Single 预览/归档身份不一致 | `memberKey()` 将空成员与 `single` 归一为同一身份，忽略 Single 的 trajectory id 差异 | 新增真实字段回归（预览空成员 vs 归档 `single/react_agent`） |
+| P2 正常预览未执行缓存淘汰 | `applyPreview` 每条被接受的帧都调用 `pruneRuns()`，不再只在 reset 时执行 | 新增 20 Run 探针，保留数不超过 `MAX_LIVE_RUNS` |
+
+测试结果：`uv run pytest tests/test_super_link_output.py tests/test_super_link_stream.py -q`
+47 passed；定向 Ruff 与 Pyright 0 错误；`cd web && npm test` 170 passed；
+`npm run typecheck` 通过。按用户口径未重复执行全量后端回归、隔离 PG、生产构建或真实链路。
+
+限制与降级：
+
+- 预览 Hub 为进程内对象，非所有者实例只提供事实与归档，不广播、不伪造实时文本；
+  `capabilities.live_output` 继续为 `local_owner_only`。
+- 预览是可丢的展示旁路，不参与运行状态、审批、交付或队列决策；断线后只保证归档完整
+  块与后续新片段，不重放未归档输出。
+- 未启动服务、未访问业务库、未执行真实模型/Worker 流；浏览器、反向代理缓冲、多标签页、
+  API 重启与多实例路由未实测。
+
+复验结果（2026-11-21）：五项问题全部闭环；普通模式轮询恢复；reset 在容量恢复后可
+独立发送，等待期间不阻塞事实通道，关闭与取消可正常退出。用户独立复跑后端 47 passed、
+前端 170 passed、typecheck 通过，并确认实际 Vue 属性解析为普通模式 `liveMode=false`。
+T05 复核通过，收口。未修改代码、未启动服务。
+
+移交 T06：真实浏览器中的多成员实时展示与归档替换；反向代理与压缩对长连接/预览帧的
+影响；多标签页与重连后的 epoch 切换；真实 Worker/模型流式端点；API 重启、非所有者
+实例与 Redis 故障下的事实/归档可用性；普通 single/team、审批、停止与连续性回归。
+
+### 20.12 SSE-T06 完成记录（2026-11-21）
+
+按 [spec.md](../spec/super-link-sse-t06/spec.md) 与
+[tasks.md](../spec/super-link-sse-t06/tasks.md) 在隔离环境执行。未连接或迁移业务库，
+未停止、重启或写入现有 8000/5173/4174 进程与共享 Redis 6379；未改变 `sl1` 游标、
+事件信封、快照协议、预览帧字段或普通模式运行流。T06 新增观测面，并修复两项运行时
+问题；A10 因缺少代理镜像标 `blocked`。
+
+| 交付 | 已实现/验证内容 | 证据与限制 |
+|---|---|---|
+| 观测面 | 新增 `server/super_link/observability.py` 进程内计数；`stream.py`/`events.py` 接入连接、慢关闭、预览与通知计数；新增 `GET .../diagnostics`，返回 process 计数、`head_seq`、`unnotified_count` 与最老积压年龄，数据库异常 503 | `tests/test_super_link_diagnostics.py` 覆盖所有者、非所有者 404、关闭功能 404、503 与通知递增；计数不跨实例 |
+| 连接配额 | `acquire_connection` 失败返回 429 + `Retry-After: 5`；SQLAlchemyError 返回 503 `event_chain_unavailable` | 8 条活跃连接时第 9 条被拒，关闭后配额释放 |
+| 协作派发修复 | `coordination.enqueue_direct` 统一调用 `stage_run_change(..., "created")`，避免直接写事件导致的 `change_key_conflict` | 相关定向测试通过；未改派发顺序与游标语义 |
+| API 关停修复 | `deploy/entrypoint.web.sh` 增加 `--timeout-graceful-shutdown 10`；`docker-compose.yml` 增加 `stop_grace_period: 30s` | 1 条 SSE 连接下关停约 10.6s，日志出现 “Application shutdown complete”；修复前会挂起超过 1 分钟 |
+| A03 断线完成 | 无 SSE 客户端时 Single 运行完成并收尾；重开页面读取快照与补读，事件 18..329 连续无缺口/重复，无第二个 Run | 浏览器 `completed_run_summary.jpg`；归档与 Run 状态一致。限制：未覆盖浏览器断网中的同页重连 |
+| A04 控制幂等 | 同幂等键重复停止返回原结果；旧 `expected_version` 409；双标签页一致；捕获“正在停止”→“已停止” | `/tmp/t06-a04-stop.json`（control_version 3）、`stop_status_final.jpg`；未出现假终态 |
+| A05 慢客户端 | SO_RCVBUF=4096 且不读，约 300 条 14.5KB 合成事实后约 16s 有界关闭 | `slow_closed=1`，配额释放，其他 API 正常；诊断计数可读 |
+| A05 多成员输出 | 真实 Team 运行（空间 2，Run `6cd9690304645b27a0f119d4da054b54`）输出协调者与两个成员预览 | 协调者 645 帧、成员 587/426 帧，同一 `output_epoch` 内按成员/块/序号；`t06-sse-team-members.log` |
+| A05 Redis 故障 | 停止 16379 后业务仍落库；SSE 从数据库补读 4 条事实；恢复后积压归零并补发 | 未通知峰值 4、最老约 27.7s；`notifier.failed` 增加后恢复；未触碰 6379 |
+| A05 API 重启 | 重启前后三个空间的 cursor/runs/deliveries/control 一致；归档与快照可读；无重复 Run | `/tmp/t06-restart-before.json`；进程内计数归零，预览不持久化 |
+| A05 故障区分 | 真实 Team 首轮出现 `Research intake did not complete (llm_error)`，空间流继续，运行终态为 `failed` | 作为业务故障样本；未单独启动指向不可达端点的实例，故该项未标通过 |
+| A07 权限隔离 | 跨用户/跨空间 snapshot、events、diagnostics、deliveries、delivery detail 均 404；坏签名/过期令牌 401；停用用户后活跃 SSE 收到 `sl.auth_required`，恢复后重新 200 | `/tmp/t06_auth_isolation.py`；未泄露存在性 |
+| A07 审批持久化 | 源审批保存失败注入不产生 `sl.intervention.changed`，`ControlRecord` 为 0 | `tests/test_super_link_event_sources.py` 新增回归 |
+| A09 普通模式 | 普通 single `57b98f0f...` 完成，同会话追问 `b831a364...` 成功；普通停止约 14s 进入 `stopped`（`stopped_by=user_stop`）；普通 team 重试成功，含两个成员轨迹 | 定向 143 passed；普通审批 UI、工具/产物单独实操未覆盖 |
+| A10 代理 | 无 nginx/caddy 二进制，`caddy:2-alpine` 拉取失败 | `blocked`；未声称代理缓冲/压缩通过；T07 前需补跑 |
+| 自动化 | 隔离 PG 8 passed；定向后端 112 + 143 passed；Ruff/Pyright 通过；前端 170 passed、typecheck/build 通过 | PG 测试会 TRUNCATE 隔离库，运行时空间数据已清空；证据保留在 `/tmp` 与 `/tmp/trae/screenshots/` |
+
+限制与移交 T07：
+
+- 首版只支持单 API 所有者；未实现所有权锁，第二实例未启动验证。T07 必须把“单 API
+  实例”写入部署约束，或先实现所有权保护再评估多实例。
+- 代理缓冲/压缩未验证（A10 `blocked`）；心跳与 `X-Accel-Buffering: no` 只有直连证据。
+- 浏览器断网后的同页重连/新 `output_epoch` 未实测，仅由前端单测与 API 级新连接覆盖；
+  普通审批真实 UI 流程、工具/产物单独实操未覆盖。
+- 真实模型端点可用并返回 reasoning，但首轮 Team intake 出现 45s 超时（`llm_error`），
+  重试成功；T07 需把模型延迟/超时纳入运行失败排查说明。
+- 含 SSE 长连接的 API 关停必须保留 graceful timeout；部署若绕过更新后的 entrypoint，
+  关停仍可能长时间挂起。
+- T06 隔离 PG 已被 PG 测试 TRUNCATE；Redis 容器与临时 runs 根在收口时清理，不保留
+  可复用运行时空间数据，证据以脚本输出、JSON 与截图为准。
+- 正式启用仍由 T07 核对迁移、配置、备份、回退与代理；T06 完成不代表 SSE 已正式启用。

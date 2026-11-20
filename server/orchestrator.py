@@ -77,6 +77,7 @@ from server.store import (
     update_run_usage,
     upsert_session_conversation,
 )
+from server.super_link import output as sl_output
 from server.trajectory_sources import discover_trajectory_sources
 from server.usage import replay_block_from_summary, usage_for_run
 
@@ -710,6 +711,14 @@ class Orchestrator:
         for q in tuple(self._subscribers.get(run_id, ())):
             # Never block the frame reader on a slow client.
             self._q_put_bounded(q, payload)
+        handle = self._handles.get(run_id)
+        if handle is not None:
+            # Display-only tap for Super-link space streams. Isolated from the
+            # run stream: a preview failure must never affect execution.
+            try:
+                sl_output.publish(handle.session_id, run_id, payload)
+            except Exception:
+                logger.debug("super-link preview publish failed", exc_info=True)
 
     def _close_streams(self, run_id: str) -> None:
         """Signal every subscriber that no more live events will arrive.

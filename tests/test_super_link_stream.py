@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import json
 import time
 import uuid
@@ -19,7 +20,7 @@ from server import store
 from server.config import get_config
 from server.deps import get_current_user
 from server.routes import super_link as routes
-from server.super_link import events, management, service, stream
+from server.super_link import events, management, output, service, stream
 from server.super_link import models as sl
 from tests.test_super_link import make_run, published
 from tests.test_super_link_runtime import case as case
@@ -964,3 +965,265 @@ async def test_disabled_feature_returns_404_without_starting_hub(
         )
     ).status_code == 404
     assert hub._tasks == []
+
+
+async def test_stream_forwards_previews_without_a_cursor(seeded, monkeypatch):
+    sessions, uid, pair, running, _message = seeded
+    hub = stream.SpaceHintHub(listen=False, poll=False)
+    monkeypatch.setattr(stream, "HUB", hub)
+    preview_hub = output.RunOutputHub()
+    monkeypatch.setattr(output, "HUB", preview_hub)
+    cfg = get_config()
+    monkeypatch.setattr(cfg, "super_link_sse_max_age_seconds", 10.0)
+    monkeypatch.setattr(cfg, "super_link_sse_heartbeat_seconds", 10.0)
+    monkeypatch.setattr(cfg, "super_link_sse_poll_seconds", 0.05)
+    monkeypatch.setattr(cfg, "super_link_sse_auth_recheck_seconds", 60.0)
+
+    head = await _head(sessions, pair.space_id)
+    lease = await stream.acquire_connection(uid)
+    generator = stream.event_stream(
+        user_id=uid,
+        space_id=pair.space_id,
+        after=events.format_cursor(pair.space_id, head.stream_epoch, head.last_seq),
+        lease=lease,
+        session_ids=[pair.team_session_id],
+    )
+    try:
+        pending = asyncio.create_task(anext(generator))
+        await asyncio.sleep(0.05)
+        preview_hub.publish(
+            pair.team_session_id,
+            running.run_id,
+            {
+                "type": "assistant_delta",
+                "turn": 2,
+                "agent_id": "member_a",
+                "agent_kind": "subagent",
+                "thinking_text": "plan",
+                "text": "hello",
+            },
+        )
+
+        first = await asyncio.wait_for(pending, 2)
+        event, frame_id, thinking = _parse(first)
+        assert event == stream.PREVIEW_EVENT
+        assert frame_id is None
+        assert "id:" not in first
+        assert thinking["kind"] == "thinking"
+        assert thinking["text"] == "plan"
+        assert thinking["output_seq"] == 1
+        assert thinking["member"] == {
+            "agent_id": "member_a",
+            "agent_kind": "subagent",
+        }
+        assert thinking["space_id"] == str(pair.space_id)
+        assert thinking["run_id"] == str(running.run_id)
+
+        second = await asyncio.wait_for(anext(generator), 2)
+        event, frame_id, content = _parse(second)
+        assert event == stream.PREVIEW_EVENT
+        assert frame_id is None
+        assert content["kind"] == "content"
+        assert content["text"] == "hello"
+        assert content["output_seq"] == 2
+        assert content["output_epoch"] == thinking["output_epoch"]
+
+        preview_hub.publish(
+            pair.team_session_id,
+            running.run_id,
+            {"type": "run_completed", "turn": 3, "final_answer": "full report"},
+        )
+        third = await asyncio.wait_for(anext(generator), 2)
+        event, _frame_id, terminal = _parse(third)
+        assert event == stream.PREVIEW_EVENT
+        assert terminal["kind"] == "terminal"
+        assert terminal["status"] == "completed"
+        assert "final_answer" not in terminal
+    finally:
+        await generator.aclose()
+        assert await stream.LIMITER.count(uid) == 0
+
+    assert preview_hub.observed(pair.team_session_id) is False
+
+
+async def test_stream_sends_reset_before_the_next_preview(seeded, monkeypatch):
+    sessions, uid, pair, running, _message = seeded
+    hub = stream.SpaceHintHub(listen=False, poll=False)
+    monkeypatch.setattr(stream, "HUB", hub)
+    preview_hub = output.RunOutputHub()
+    monkeypatch.setattr(output, "HUB", preview_hub)
+    cfg = get_config()
+    monkeypatch.setattr(cfg, "super_link_sse_max_age_seconds", 10.0)
+    monkeypatch.setattr(cfg, "super_link_sse_heartbeat_seconds", 10.0)
+    monkeypatch.setattr(cfg, "super_link_sse_poll_seconds", 0.05)
+    monkeypatch.setattr(cfg, "super_link_sse_auth_recheck_seconds", 60.0)
+    monkeypatch.setattr(cfg, "super_link_sse_output_queue_frames", 1)
+
+    head = await _head(sessions, pair.space_id)
+    lease = await stream.acquire_connection(uid)
+    generator = stream.event_stream(
+        user_id=uid,
+        space_id=pair.space_id,
+        after=events.format_cursor(pair.space_id, head.stream_epoch, head.last_seq),
+        lease=lease,
+        session_ids=[pair.team_session_id],
+    )
+    try:
+        pending = asyncio.create_task(anext(generator))
+        await asyncio.sleep(0.05)
+        for index in range(3):
+            preview_hub.publish(
+                pair.team_session_id,
+                running.run_id,
+                {
+                    "type": "assistant_delta",
+                    "turn": 1,
+                    "agent_kind": "coordinator",
+                    "text": f"chunk-{index}",
+                },
+            )
+
+        first = await asyncio.wait_for(pending, 2)
+        event, _frame_id, reset = _parse(first)
+        assert event == stream.OUTPUT_RESET_EVENT
+        assert reset["run_ids"] == [str(running.run_id)]
+        assert reset["reason"] == "preview_overflow"
+        assert reset["space_id"] == str(pair.space_id)
+
+        preview_hub.publish(
+            pair.team_session_id,
+            running.run_id,
+            {
+                "type": "assistant_delta",
+                "turn": 1,
+                "agent_kind": "coordinator",
+                "text": "after-reset",
+            },
+        )
+        second = await asyncio.wait_for(anext(generator), 2)
+        event, _frame_id, content = _parse(second)
+        assert event == stream.PREVIEW_EVENT
+        assert content["text"] == "after-reset"
+        assert content["output_seq"] == 1
+    finally:
+        await generator.aclose()
+        assert await stream.LIMITER.count(uid) == 0
+
+
+async def test_stream_hides_previews_from_other_participant_sessions(
+    seeded, monkeypatch
+):
+    sessions, uid, pair, running, _message = seeded
+    hub = stream.SpaceHintHub(listen=False, poll=False)
+    monkeypatch.setattr(stream, "HUB", hub)
+    preview_hub = output.RunOutputHub()
+    monkeypatch.setattr(output, "HUB", preview_hub)
+    cfg = get_config()
+    monkeypatch.setattr(cfg, "super_link_sse_max_age_seconds", 10.0)
+    monkeypatch.setattr(cfg, "super_link_sse_heartbeat_seconds", 10.0)
+    monkeypatch.setattr(cfg, "super_link_sse_poll_seconds", 0.05)
+    monkeypatch.setattr(cfg, "super_link_sse_auth_recheck_seconds", 60.0)
+
+    head = await _head(sessions, pair.space_id)
+    lease = await stream.acquire_connection(uid)
+    generator = stream.event_stream(
+        user_id=uid,
+        space_id=pair.space_id,
+        after=events.format_cursor(pair.space_id, head.stream_epoch, head.last_seq),
+        lease=lease,
+        session_ids=[pair.team_session_id],
+    )
+    try:
+        pending = asyncio.create_task(anext(generator))
+        await asyncio.sleep(0.05)
+        preview_hub.publish(
+            pair.single_session_id,
+            "single-run",
+            {
+                "type": "assistant_delta",
+                "turn": 1,
+                "text": "single only",
+            },
+        )
+        preview_hub.publish(
+            pair.team_session_id,
+            running.run_id,
+            {
+                "type": "assistant_delta",
+                "turn": 1,
+                "agent_kind": "coordinator",
+                "text": "team visible",
+            },
+        )
+
+        frame = await asyncio.wait_for(pending, 2)
+        event, _frame_id, data = _parse(frame)
+        assert event == stream.PREVIEW_EVENT
+        assert data["run_id"] == str(running.run_id)
+        assert data["text"] == "team visible"
+    finally:
+        await generator.aclose()
+        assert await stream.LIMITER.count(uid) == 0
+
+
+async def test_frame_buffer_reserves_capacity_for_facts():
+    buffer = stream.FrameBuffer(max_frames=2, max_bytes=100_000)
+
+    assert await buffer.put_preview("preview") is True
+    # Previews may only use half of a two-frame buffer.
+    assert await buffer.put_preview("preview") is False
+    # A fact still fits and is not blocked by preview traffic.
+    assert await buffer.put("fact", timeout=1.0) is True
+
+    first = await buffer.get()
+    second = await buffer.get()
+    assert (first, second) == ("preview", "fact")
+
+    await buffer.terminate()
+    assert await buffer.put_preview("late") is False
+
+
+async def test_preview_reset_is_flushed_when_the_buffer_drains():
+    """A dropped preview must not wait for new model output to be repaired."""
+
+    subscription = output.OutputSubscription(max_frames=8)
+    buffer = stream.FrameBuffer(max_frames=2, max_bytes=100_000)
+    producer = asyncio.create_task(
+        stream._produce_previews(
+            buffer,
+            subscription,
+            space_id=uuid.uuid4(),
+            output_epoch="epoch-test",
+        )
+    )
+    try:
+        subscription.offer(
+            output.PreviewItem(
+                "run-a",
+                output.PreviewKind.CONTENT,
+                {"block_key": "content|single||1", "text": "first"},
+            )
+        )
+        subscription.offer(
+            output.PreviewItem(
+                "run-a",
+                output.PreviewKind.CONTENT,
+                {"block_key": "content|single||1", "text": "second"},
+            )
+        )
+        await asyncio.sleep(0.05)
+        # The preview quota is one frame; the second frame was dropped.
+        assert buffer.pending_frames == 1
+        event, _frame_id, _data = _parse(await asyncio.wait_for(buffer.get(), 1))
+        assert event == stream.PREVIEW_EVENT
+
+        # Nothing else is published. Draining alone must wake the producer and
+        # deliver the pending reset instead of stranding it forever.
+        event, _frame_id, data = _parse(await asyncio.wait_for(buffer.get(), 1))
+        assert event == stream.OUTPUT_RESET_EVENT
+        assert data["run_ids"] == ["run-a"]
+    finally:
+        subscription.close()
+        producer.cancel()
+        with contextlib.suppress(asyncio.CancelledError):
+            await producer

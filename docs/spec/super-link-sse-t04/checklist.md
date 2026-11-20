@@ -12,12 +12,20 @@
       合并、去重与“事实不直接改控制状态”用例。
 - [x] 旧响应丢弃：请求序号、游标单调、空间代次三重校验；离线或跨空间迟到响应不写入。
       证据：`sync.test.ts` 旧刷新、游标倒退、`stop()` 后迟到用例。
+- [x] 状态竞态（四轮复核 10 项回归）：局部刷新读取更前快照不推进事件游标；不同视图的
+      并发刷新串行化且失效排队；`returnToLatest` 拒绝倒退快照并保留历史/更新标记；
+      `shutdown()` 作废在途成功与失败回调，迟到快照不能恢复 `live`；实时刷新落地时
+      重查 `history`，不重写历史列表；重同步/全量替换释放被放弃刷新的 owner 与执行
+      标志；被取代请求的迟到成功或失败都不关闭连接、不触发重同步；全量请求互相接管时
+      作废旧 `replaceOwner` 并释放 `replaceInFlight`；被取代全量请求的迟到 410/404
+      不触发重同步或改写终止状态；全量替换失败并重连后，被取代刷新重新入队的失效会
+      唤醒当前周期。证据：`sync.test.ts` 10 项竞态用例。
 - [x] 重连与重同步：EOF/网络/5xx 从最后游标重连；`sl.resync_required`、410、400、
       epoch 变化重新全量快照；401/403、404、429 与 8 次失败映射符合规格 §5.5/§6。
       证据：`sync.test.ts` 对应用例。
 - [x] 分页与历史：运行/交付/恢复操作可续页；成功后才进入 `history`，失败不困在历史；
       历史模式只置 `hasUpdates`，`returnToLatest` 全量替换；待审批整页替换。
-      证据：`sync.test.ts` 15 项（含新增失败回退用例）。
+      证据：`sync.test.ts` 25 项（含新增失败回退与竞态用例）。
 - [x] 页面接入：详情不再调用旧 `space/runs/deliveries`，5 秒定时器已移除；列表页保留
       旧 REST 加载与分页；`more` 分别走旧列表分页与 `loadMore`；同步状态条、重试与
       历史提示可见。证据：`SuperLinkView.vue`；typecheck 与生产构建。
@@ -34,7 +42,7 @@
 - [x] 现有行为：`openRunStream` 与普通模式调用方未改；幂等键、`expected_version`、
       `sessionStorage` 待确认请求与“停止需真实收尾”语义保留。证据：`sse.ts` 只改导入；
       `SuperLinkControls.vue`。
-- [x] 回归：`cd web && npm test` 135 passed；`npm run typecheck` 通过；
+- [x] 回归：`cd web && npm test` 145 passed；`npm run typecheck` 通过；
       `npm run build` 通过；后端
       `uv run pytest tests/test_super_link_stream.py -q -p no:cacheprovider` 26 passed。
 - [x] 文档与移交：计划 §20.2/§20.6 已更新、§20.10 已新增；spec/tasks 状态与复选框

@@ -21,4 +21,8 @@ echo "[entrypoint] alembic upgrade head (database: ${SERVER_DATABASE_URL:-<unset
 alembic -c server/alembic.ini upgrade head
 
 echo "[entrypoint] starting uvicorn"
-exec uvicorn server.app:app --host 0.0.0.0 --port 8000
+# SSE responses are long-lived by design. Without a graceful-shutdown timeout a
+# container stop waits for each open stream to reach its maximum lifetime (300s
+# by default), so uvicorn is killed before lifespan cleanup runs. Cap the wait so
+# connections are cancelled and the orchestrator shuts down cleanly.
+exec uvicorn server.app:app --host 0.0.0.0 --port 8000 --timeout-graceful-shutdown 10

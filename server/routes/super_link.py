@@ -8,6 +8,7 @@ import logging
 import time
 import uuid
 from collections.abc import AsyncIterator
+from datetime import UTC, datetime
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -30,7 +31,7 @@ from server.routes.runs import (
     run_approve,
     run_steer,
 )
-from server.super_link import controls, events, management, service, stream
+from server.super_link import controls, events, management, observability, service, stream
 from server.super_link import models as sl
 from server.super_link.contracts import CollaborationError
 from server.super_link.coordination import automatic_budget
@@ -259,6 +260,61 @@ async def _space_cursor(session: AsyncSession, space_id: uuid.UUID) -> str | Non
     return events.format_cursor(space_id, head.stream_epoch, head.last_seq)
 
 
+@router.get("/spaces/{space_id}/diagnostics")
+async def space_diagnostics(
+    space_id: uuid.UUID,
+    user: store.User = Depends(get_current_user),
+) -> dict:
+    """Owner-only, read-only view of process counters and DB notification backlog."""
+    try:
+        async with store.get_sessionmaker()() as session:
+            await _space(session, user, space_id)
+            head = await session.get(sl.SuperLinkEventHead, space_id)
+            unnotified_count = 0
+            oldest = None
+            if head is not None:
+                backlog = (
+                    sl.SuperLinkEvent.space_id == space_id,
+                    sl.SuperLinkEvent.stream_epoch == head.stream_epoch,
+                    sl.SuperLinkEvent.notified_at.is_(None),
+                )
+                unnotified_count = int(
+                    await session.scalar(
+                        select(func.count())
+                        .select_from(sl.SuperLinkEvent)
+                        .where(*backlog)
+                    )
+                    or 0
+                )
+                oldest = await session.scalar(
+                    select(func.min(sl.SuperLinkEvent.recorded_at)).where(*backlog)
+                )
+    except SQLAlchemyError:
+        raise HTTPException(503, "event_chain_unavailable") from None
+
+    now = datetime.now(UTC)
+    oldest_age = 0.0
+    if oldest is not None:
+        if oldest.tzinfo is None:
+            oldest = oldest.replace(tzinfo=UTC)
+        oldest_age = max(0.0, (now - oldest).total_seconds())
+    process = observability.snapshot()
+    process["sse"]["active_for_user"] = await stream.LIMITER.count(user.id)
+    process["sse"]["limit"] = get_config().super_link_sse_max_connections
+    return {
+        "schema_version": 1,
+        "scope": "process",
+        "generated_at": now.isoformat(),
+        "process": process,
+        "events": {
+            "stream_epoch": str(head.stream_epoch) if head is not None else None,
+            "head_seq": int(head.last_seq) if head is not None else 0,
+            "unnotified_count": unnotified_count,
+            "oldest_unnotified_age_seconds": round(oldest_age, 3),
+        },
+    }
+
+
 @router.get("/spaces")
 async def spaces(
     after: uuid.UUID | None = None,
@@ -349,11 +405,13 @@ async def space_events(
 ) -> StreamingResponse:
     if after is None:
         raise HTTPException(400, "invalid_cursor")
+    session_ids: list[uuid.UUID] = []
     try:
         # Reject a disabled owner or a foreign space before a 200 stream; the
         # cursor read alone only checks space ownership.
         async with store.get_sessionmaker()() as session:
             await management.owned_space(session, user.id, space_id)
+            session_ids = await management.participant_session_ids(session, space_id)
         # Reuse T02 cursor semantics before committing to a 200 stream.
         await events.read_events(
             user_id=user.id, space_id=space_id, after=after, limit=1
@@ -365,13 +423,18 @@ async def space_events(
         raise HTTPException(503, "event_chain_unavailable") from None
     lease = await stream.acquire_connection(user.id)
     if lease is None:
+        observability.inc("sse.rejected")
         raise HTTPException(
             429, "too_many_connections", headers={"Retry-After": "5"}
         )
     cfg = get_config()
     return SSEStreamingResponse(
         stream.event_stream(
-            user_id=user.id, space_id=space_id, after=after, lease=lease
+            user_id=user.id,
+            space_id=space_id,
+            after=after,
+            lease=lease,
+            session_ids=session_ids,
         ),
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},

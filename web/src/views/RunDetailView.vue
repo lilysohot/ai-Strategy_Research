@@ -30,10 +30,31 @@ import {
 import type { RunTraceRecord, TraceCompleteness } from '@/types'
 import { useRunStreamStore } from '@/stores/runs'
 import { isActiveRunStatus } from '@/utils/runStatus'
+import {
+  blockMemberLabel,
+  shouldPollRunDetail,
+  visibleBlocks,
+  type LiveBlock,
+  type RunLiveOutput,
+} from '@/superLink/live'
 
-const props = withDefaults(defineProps<{ runId: string | null; active?: boolean }>(), {
-  active: true,
-})
+const props = withDefaults(
+  defineProps<{
+    runId: string | null
+    active?: boolean
+    /** Ephemeral Super-link preview; absent keeps the normal-mode behaviour. */
+    live?: RunLiveOutput | null
+    /**
+     * Explicit space-mode flag. An absent Boolean prop resolves to false in
+     * Vue, so mode must never be inferred from `liveActive === undefined`.
+     */
+    liveMode?: boolean
+    /** Only the Super-link drawer passes this; it owns polling and the final reload. */
+    liveActive?: boolean
+  }>(),
+  { active: true, live: null, liveMode: false },
+)
+const emit = defineEmits<{ archiveLoaded: [runId: string] }>()
 
 const runStream = useRunStreamStore()
 
@@ -46,8 +67,40 @@ let loadVersion = 0
 let refreshTimer: ReturnType<typeof setInterval> | null = null
 const running = computed(() => runStream.runId === props.runId
   && isActiveRunStatus(runStream.status))
+/** The global run store only describes this run in normal mode, not in a space. */
+const globalRun = computed(() => !!props.runId && runStream.runId === props.runId)
+/** In the drawer the parent's activity flag decides; otherwise keep T3.5 polling. */
+const polling = computed(() => shouldPollRunDetail({
+  liveMode: props.liveMode,
+  liveActive: props.liveActive === true,
+  globalRunning: running.value,
+}))
 
 const hasContent = computed(() => records.value.length > 0)
+const liveBlocks = computed(() => visibleBlocks(props.live, records.value))
+
+/** Live fragments grouped by member, preserving first-seen order. */
+const liveGroups = computed(() => {
+  const groups = new Map<string, { key: string; label: string; blocks: LiveBlock[] }>()
+  for (const block of liveBlocks.value) {
+    const key = `${block.agent_kind}|${block.agent_id}`
+    let group = groups.get(key)
+    if (!group) {
+      group = { key, label: blockMemberLabel(block), blocks: [] }
+      groups.set(key, group)
+    }
+    group.blocks.push(block)
+  }
+  return [...groups.values()]
+})
+
+function toolStateLabel(block: LiveBlock): string {
+  const tool = block.tool
+  if (!tool) return ''
+  if (tool.state === 'started') return '执行中'
+  if (tool.skipped) return '已跳过'
+  return tool.ok === false ? '失败' : '完成'
+}
 
 /**
  * F06: an interrupted run must say so. A `partial` trace is still readable, so
@@ -61,7 +114,7 @@ const completenessNotice = computed(() => {
     if (!partialSources.length) return ''
     return `主 Agent 已完成；${partialSources.length} 条成员/阶段轨迹不完整，已保留可读取部分`
   }
-  if (running.value) return '运行仍在进行中，轨迹会自动更新；尚未写入结束记录'
+  if (polling.value) return '运行仍在进行中，轨迹会自动更新；尚未写入结束记录'
   if (c.state === 'unavailable') return c.reason || '没有可读的轨迹记录'
   return c.reason || '运行未正常结束，已保存的记录可能缺少最后一部分内容'
 })
@@ -82,6 +135,13 @@ async function load() {
     if (version !== loadVersion || runId !== props.runId) return
     records.value = res.records
     completeness.value = res.completeness ?? null
+    // Only release a terminal preview once polling has stopped (or a gap was
+    // declared): a periodic poll that started before the terminal frame may
+    // still lack the final turn, and dropping the live text for it would flash
+    // a partial archive.
+    if (!props.liveMode || props.liveActive === false || props.live?.needsArchive) {
+      emit('archiveLoaded', runId)
+    }
   } catch (err) {
     if (version !== loadVersion || runId !== props.runId) return
     if (err instanceof ApiError && err.status === 404) {
@@ -103,9 +163,12 @@ const revealed = ref<Record<number, number>>({})
 
 // The same component survives follow-up turns and tab switches. Refresh on
 // terminal status too: a snapshot read during execution is not the final trace.
+// In the Super-link drawer `liveActive` replaces the global run status as the
+// polling switch; its true→false edge means the run settled, so reload once
+// immediately and let the archived trace replace every live fragment.
 watch(
-  [() => props.runId, () => props.active, () => runStream.status],
-  ([id, active], previous) => {
+  [() => props.runId, () => props.active, () => runStream.status, () => props.liveActive],
+  ([id, active, , liveActiveValue], previous) => {
     ++loadVersion
     if (refreshTimer !== null) clearInterval(refreshTimer)
     refreshTimer = null
@@ -117,14 +180,25 @@ watch(
       errorMsg.value = ''
     }
     if (!id || !active) return
+    const settled = previous !== undefined && previous[3] === true && liveActiveValue === false
     void load()
-    if (running.value) {
+    if (settled) return
+    if (polling.value) {
       refreshTimer = setInterval(() => {
         if (!loading.value) void load()
       }, 3000)
     }
   },
   { immediate: true },
+)
+
+// A preview gap is repaired from the archive; fetch saved turns again so the
+// remaining live fragments are filtered against the latest records.
+watch(
+  () => props.live?.needsArchive ?? false,
+  (needs) => {
+    if (needs && props.runId && props.active && !loading.value) void load()
+  },
 )
 
 onUnmounted(() => {
@@ -242,7 +316,7 @@ defineExpose({ load })
       `v-else` branch, so any finished run (reconcile fills runDir) rendered the
       meta box *instead of* its records. Found by the F05 browser validation.
     -->
-    <div v-if="runStream.runDir || runStream.errorMessage" class="run-detail__meta">
+    <div v-if="globalRun && (runStream.runDir || runStream.errorMessage)" class="run-detail__meta">
       <div v-if="runStream.runDir" class="run-detail__meta-row">
         <span class="run-detail__meta-label">运行目录</span>
         <code class="run-detail__meta-value">{{ runStream.runDir }}</code>
@@ -253,12 +327,57 @@ defineExpose({ load })
       </div>
     </div>
 
+    <!--
+      SSE-T05: ephemeral preview, always shown above the saved timeline. It is
+      display-only and disappears once the archive contains the same turn.
+    -->
+    <section v-if="liveBlocks.length" class="live-output" aria-label="实时输出（未保存）">
+      <header class="live-output__head">
+        <span class="live-output__title">实时输出（未保存）</span>
+        <span class="live-output__hint">运行结束后以归档记录为准</span>
+      </header>
+      <p v-if="live?.needsArchive" class="live-output__notice">
+        部分片段缺失，正在以归档内容校正
+      </p>
+      <section v-for="group in liveGroups" :key="group.key" class="live-group">
+        <div class="live-group__member">{{ group.label }}</div>
+        <div
+          v-for="block in group.blocks"
+          :key="block.key"
+          class="live-block"
+          :class="`live-block--${block.kind}`"
+        >
+          <template v-if="block.kind === 'content'">
+            <div class="tl-content" v-html="renderContent(block.text)" />
+            <span v-if="block.truncated" class="live-truncated">内容过长，仅显示已接收部分</span>
+          </template>
+          <template v-else-if="block.kind === 'thinking'">
+            <details class="tl-thinking">
+              <summary class="tl-thinking__summary">模型推理 / 说明</summary>
+              <pre class="tl-thinking__body">{{ block.text }}</pre>
+            </details>
+            <span v-if="block.truncated" class="live-truncated">内容过长，仅显示已接收部分</span>
+          </template>
+          <div v-else-if="block.kind === 'tool' && block.tool" class="live-tool">
+            <code>{{ block.tool.name || '工具' }}</code>
+            <el-tag
+              size="small"
+              :type="block.tool.state === 'started' ? 'info' : block.tool.ok === false ? 'danger' : 'success'"
+            >{{ toolStateLabel(block) }}</el-tag>
+            <span v-if="block.tool.ms != null" class="tl-meta">{{ block.tool.ms }}ms</span>
+            <span v-if="block.tool.detail" class="live-tool__detail">{{ block.tool.detail }}</span>
+          </div>
+          <p v-else-if="block.kind === 'notice'" class="live-output__notice">{{ block.text }}</p>
+        </div>
+      </section>
+    </section>
+
     <el-empty
-      v-if="!loading && !hasContent"
+      v-if="!loading && !hasContent && !liveBlocks.length"
       description="暂无轨迹记录（运行可能尚未产生输出）"
     />
 
-    <div v-else v-loading="loading" class="timeline">
+    <div v-if="hasContent" v-loading="loading" class="timeline">
       <div v-for="(rec, i) in records" :key="i" class="tl-item" :class="`tl-${rec.t}`">
         <div class="tl-dot" />
         <div class="tl-body">
@@ -390,6 +509,82 @@ defineExpose({ load })
 
 .run-detail__meta-error .run-detail__meta-value {
   color: var(--el-color-danger);
+}
+
+/* SSE-T05: unsaved preview blocks, visually distinct from the archived timeline. */
+.live-output {
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  border: 1px dashed var(--el-color-primary-light-5);
+  border-radius: 8px;
+  background: var(--el-color-primary-light-9);
+}
+
+.live-output__head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.live-output__title {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.live-output__hint {
+  font-size: 12px;
+  color: var(--el-text-color-secondary);
+}
+
+.live-output__notice {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--el-color-warning);
+}
+
+.live-group {
+  margin-top: 8px;
+}
+
+.live-group__member {
+  display: inline-block;
+  margin-bottom: 4px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--el-fill-color);
+  color: var(--el-text-color-secondary);
+  font-size: 11px;
+}
+
+.live-block {
+  margin-top: 6px;
+}
+
+.live-tool {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+
+.live-tool code {
+  background: var(--el-fill-color);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.live-tool__detail {
+  color: var(--el-text-color-secondary);
+  word-break: break-all;
+}
+
+.live-truncated {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--el-text-color-placeholder);
 }
 
 .timeline {

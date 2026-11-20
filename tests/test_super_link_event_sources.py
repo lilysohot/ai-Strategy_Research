@@ -11,7 +11,7 @@ import uuid
 from datetime import UTC, datetime, timedelta
 
 import pytest
-from sqlalchemy import select
+from sqlalchemy import func, select
 
 from server import business_service as biz
 from server import dispatch_outbox, store
@@ -163,6 +163,30 @@ async def test_controls_and_session_deletion_are_staged(case):
         "available": False,
         "reason": "session_deleted",
     }
+
+
+async def test_failed_approval_persist_leaves_no_intervention_fact(case, monkeypatch):
+    """A failed approval write must not leak a phantom approve entry."""
+    sessions, uid, space_id, team, _ = case
+    run_id = await make_run(sessions, uid, team)
+
+    def boom(*args, **kwargs):
+        raise RuntimeError("persist failed")
+
+    monkeypatch.setattr(store, "_stage_intervention", boom)
+    with pytest.raises(RuntimeError, match="persist failed"):
+        await store.create_control(
+            run_id=run_id,
+            session_id=team,
+            user_id=uid,
+            kind="approval",
+            status="pending",
+            external_id="ext-failed",
+        )
+    async with sessions() as session:
+        assert await session.scalar(select(func.count()).select_from(store.ControlRecord)) == 0
+    items = await rows(sessions, space_id)
+    assert not [item for item in items if item.type == "sl.intervention.changed"]
 
 
 async def test_dispatch_outbox_transitions_and_stop(case):

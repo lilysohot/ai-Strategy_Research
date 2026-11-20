@@ -2,7 +2,7 @@
 
 | 项目 | 内容 |
 |---|---|
-| 状态 | **已实施（2026-11-20）** |
+| 状态 | **已实施并完成竞态修复（2026-11-20）** |
 | 规格 | [spec.md](spec.md) |
 | 边界 | 只改 `web/` 与文档；不改服务器、迁移、`openRunStream` 调用方与普通模式 |
 | 完成定义 | 快照接流无空隙；事实去重与合并可靠；旧响应丢弃；重连/重新同步可恢复；离页释放连接；历史与输入不被抢 |
@@ -94,3 +94,51 @@
 - [x] 更新 §20.6 文档完备性结论中“T04—T07 尚未实施”的表述。
 - [x] 移交 T06 的测试补强：在隔离 PG 的列表并发测试中，除推进事件头外同时提交业务状态
       （如审批完成），验证返回内容与返回游标属于同一快照边界；该任务不阻塞 T04。
+
+## T4.9 复核竞态修复
+
+- [x] [P1] 拆分事件消费游标与快照版本：局部 `applyRefresh` 只推进内部 `appliedSeq`，
+      不再推进 `state.cursor/seq`；未合并视图的迟到事实仍按 `invalidate` 刷新。
+- [x] [P1] scoped 刷新串行化：同一时间只允许一个请求在途，新失效排队；被全量替换
+      取代的请求在替换序号未变时重新入队，避免不同视图交错时丢失刷新。
+- [x] [P2] `returnToLatest` 带 `min_cursor` 并校验快照 `seq` 不倒退；旧快照返回时保留
+      `history`、`hasUpdates` 与未合并失效，只提示稍后重试，不修改列表。
+- [x] [P2] `shutdown()` 递增代次，作废所有在途快照的成功/失败回调与流回调；owner
+      标记避免旧请求的 `finally` 清除新请求标志。
+- [x] [P2] 实时刷新落地前重新检查 `history`；历史开始后返回的响应只重新排队并置
+      `hasUpdates`，不追加或覆盖历史列表。
+- [x] `sync.test.ts` 新增 5 项竞态回归（共 20 项）；`npm test` 140 passed、
+      `npm run typecheck`、`npm run build` 通过；后端 stream 26 passed。
+
+## T4.10 请求作废边界收尾
+
+- [x] 全量替换入口 `loadInitial`、`requestResync`、`returnToLatest` 统一调用
+      `invalidateRefresh()`：递增 `refreshOwner` 并释放 `refreshInFlight`；被放弃请求的
+      `finally` 不再清除新周期的标志，重同步成功后后续事实可正常刷新。
+- [x] `loadRefresh` 的成功与失败路径都校验 `request === latestFullRequest` 与 owner；
+      被取代请求的迟到 410/401/404 不再关闭正常连接或触发重同步；仅当替换未发生时
+      将其失效标记重新排队。
+- [x] 新增 2 项回归（重同步释放旧刷新、被取代错误不关流），`sync.test.ts` 共 22 项；
+      全量 `npm test` 142 passed、`npm run typecheck`、`npm run build` 通过。
+
+## T4.11 全量请求作废统一
+
+- [x] 新增 `claimReplace()`：`loadInitial`、`returnToLatest`、`requestResync` 接管时递增
+      `replaceOwner`、作废局部刷新，并释放旧 `replaceInFlight`；`runResync` 持有并校验
+      自己的 owner，旧全量请求的 `finally` 不再影响新周期。
+- [x] 四条全量路径（首次加载、“查看最新”、重同步及其失败分支）的成功、错误与清理回调
+      都校验请求编号与 owner；被取代请求迟到的 410 不再触发重同步，404 不再改写
+      `not_found`，成功响应也不覆盖新状态。
+- [x] 新增 2 项全量交错回归（重同步释放旧“查看最新”、迟到 410/404 不关流），
+      `sync.test.ts` 共 24 项；全量 `npm test` 144 passed、`npm run typecheck`、
+      `npm run build` 通过。
+
+## T4.12 失败恢复后的失效唤醒
+
+- [x] 新增 `wakeRefresh()`：被取代请求把失效范围重新入队后，仅在当前周期可刷新时
+      （`live`、无 resync/replace/refresh 在途）安排 0ms 刷新；历史模式只置更新提示，
+      接管进行中则由接管者负责唤醒。
+- [x] `loadRefresh` 的成功与失败两条被取代分支在 `requeue(scopes)` 后统一调用
+      `wakeRefresh()`，避免旧 owner 的 `finally` 跳过调度后失效永久滞留。
+- [x] 新增“全量 B 失败 → 重连完成 → A 最后返回”回归；`sync.test.ts` 共 25 项，
+      全量 `npm test` 145 passed、`npm run typecheck`、`npm run build` 通过。

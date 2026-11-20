@@ -48,13 +48,29 @@ try {
   }
 } catch { /* Storage may be disabled; in-page retries remain idempotent. */ }
 
-const { state: sync, retry: retrySync, refreshNow, returnToLatest, loadMore: loadMoreSync } = useSpaceSync(spaceId)
+const {
+  state: sync,
+  retry: retrySync,
+  refreshNow,
+  returnToLatest,
+  loadMore: loadMoreSync,
+  acknowledgeArchive,
+} = useSpaceSync(spaceId)
 const current = computed(() => sync.value.space)
 const runs = computed(() => sync.value.runs.items)
 const deliveries = computed(() => sync.value.deliveries.items)
 const pendingInterventions = computed(() => sync.value.pendingInterventions.items)
 const pendingTotal = computed(() => sync.value.pendingInterventions.total)
 const activeRunIds = computed(() => sync.value.activeRunIds)
+/** Live preview for the open run; the drawer owns the archive hand-off. */
+const selectedLive = computed(() => (selectedRun.value ? sync.value.live.runs[selectedRun.value] ?? null : null))
+const selectedRunActive = computed(() => {
+  const id = selectedRun.value
+  if (!id) return false
+  const live = sync.value.live.runs[id]
+  if (live && !live.active) return false
+  return activeRunIds.value.includes(id)
+})
 const peers = computed(() => sync.value.participants)
 const updatedAt = computed(() => sync.value.updatedAt ? new Date(sync.value.updatedAt).toLocaleTimeString('zh-CN') : '')
 const detailLoading = computed(() => sync.value.status === 'loading' || sync.value.status === 'resyncing')
@@ -289,7 +305,14 @@ onUnmounted(() => { epoch++ })
       <el-button v-if="selectedRun" @click="inspectRun(selectedRun!)">刷新成果</el-button>
       <details><summary>运行模型与收尾状态</summary><pre class="sl-pre">{{ JSON.stringify(runs.find(r => r.run_id === selectedRun), null, 2) }}</pre></details>
       <ArtifactPanel :run-id="selectedRun" />
-      <RunDetailView :run-id="selectedRun" :active="runOpen" />
+      <RunDetailView
+        :run-id="selectedRun"
+        :active="runOpen"
+        :live="selectedLive"
+        :live-mode="true"
+        :live-active="selectedRunActive"
+        @archive-loaded="acknowledgeArchive"
+      />
     </el-drawer>
   </main>
 </template>

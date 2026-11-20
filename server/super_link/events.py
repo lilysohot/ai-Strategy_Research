@@ -24,6 +24,7 @@ from sqlalchemy.orm import Session as SyncSession
 from server import store
 from server.config import get_config
 from server.super_link import models as sl
+from server.super_link import observability
 from server.super_link.contracts import CollaborationError
 
 logger = logging.getLogger(__name__)
@@ -712,6 +713,7 @@ class EventNotifier:
             try:
                 await self.redis.publish(self.channel, message)
             except Exception:  # Redis is a hint; the DB event remains authoritative.
+                observability.inc("notifier.failed")
                 logger.warning("super-link event notification failed", exc_info=True)
                 return len(published) if published else 0
             published.append((space_id, stream_epoch, int(head_seq)))
@@ -729,6 +731,7 @@ class EventNotifier:
                     )
                     .values(notified_at=func.now())
                 )
+        observability.inc("notifier.published", len(published))
         return len(published)
 
     async def run_forever(self, interval_seconds: float = 1.0) -> None:
@@ -736,6 +739,7 @@ class EventNotifier:
             try:
                 await self.publish_once()
             except Exception:
+                observability.inc("notifier.failed")
                 logger.warning("super-link event notifier cycle failed", exc_info=True)
             await _sleep(interval_seconds)
 

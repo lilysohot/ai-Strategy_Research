@@ -41,5 +41,6 @@ export function useSpaceSync(spaceId: Ref<string>) {
     refreshNow: () => sync?.refreshNow(),
     returnToLatest: () => sync?.returnToLatest(),
     loadMore: (kind: ListKind) => sync?.loadMore(kind) ?? Promise.resolve(),
+    acknowledgeArchive: (runId: string) => sync?.acknowledgeArchive(runId),
   }
 }

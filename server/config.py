@@ -94,6 +94,9 @@ class ServerConfig(BaseSettings):
     # A blocked ASGI send or a full per-connection buffer must not hold the
     # lease forever; this is the per-chunk send/buffer deadline.
     super_link_sse_send_timeout_seconds: float = Field(default=15.0, gt=0)
+    # Per-connection buffer for high-frequency run preview frames (SSE-T05).
+    # These are display-only and may be dropped; space facts never share it.
+    super_link_sse_output_queue_frames: int = Field(default=256, ge=1, le=4096)
     # Hard wall-clock budget per run, applied by the orchestrator (SIGKILL
     # fallback) and also handed to the worker via FRONTIER_AGENT_TASK_WALL_TIME_S.
     # Keep the runtime's half-wall research floor at 450s; profile caps research

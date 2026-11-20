@@ -169,6 +169,75 @@ test('stop aborts the connection and suppresses the close callback', async () =>
   assert.equal(closeCalls, 0)
 })
 
+test('dispatches previews and output resets without treating them as facts', async () => {
+  const previews: Array<{ run_id?: string; output_seq?: number; kind?: string }> = []
+  const resets: Array<{ run_ids?: string[]; reason?: string }> = []
+  let facts = 0
+  let controls = 0
+  const closed = new Promise<StreamCloseInfo>((resolve) => {
+    const body =
+      'event: sl.run.preview\n' +
+      `data: ${JSON.stringify({
+        schema_version: 1,
+        space_id: 'space-a',
+        run_id: 'run-a',
+        output_epoch: 'out-1',
+        output_seq: 1,
+        kind: 'content',
+        text: 'hello',
+      })}\n\n` +
+      'event: sl.output_reset\n' +
+      'data: {"schema_version":1,"space_id":"space-a","run_ids":["run-a"],"reason":"preview_overflow"}\n\n' +
+      // Unknown events and malformed preview bodies must not disturb the stream.
+      'event: sl.future.event\n' +
+      'data: {"anything":true}\n\n' +
+      'event: sl.run.preview\n' +
+      'data: {not-json\n\n'
+    const fetchImpl = (async () => sseResponse([body])) as typeof fetch
+    openSpaceStream({
+      url: '/events',
+      token: 'token-1',
+      after: 'sl1:space-a:epoch-1:0',
+      fetchImpl,
+      callbacks: {
+        onFact: () => {
+          facts += 1
+        },
+        onControl: () => {
+          controls += 1
+        },
+        onPreview: (preview) => previews.push(preview),
+        onOutputReset: (reset) => resets.push(reset),
+        onClose: resolve,
+      },
+    })
+  })
+
+  const info = await closed
+  assert.equal(info.reason, 'eof')
+  assert.equal(facts, 0)
+  assert.equal(controls, 0)
+  assert.deepEqual(previews, [
+    {
+      schema_version: 1,
+      space_id: 'space-a',
+      run_id: 'run-a',
+      output_epoch: 'out-1',
+      output_seq: 1,
+      kind: 'content',
+      text: 'hello',
+    },
+  ])
+  assert.deepEqual(resets, [
+    {
+      schema_version: 1,
+      space_id: 'space-a',
+      run_ids: ['run-a'],
+      reason: 'preview_overflow',
+    },
+  ])
+})
+
 test('missing bearer fails as an auth HTTP close', async () => {
   const closed = new Promise<StreamCloseInfo>((resolve) => {
     const fetchImpl = (async () => assert.fail('fetch must not run')) as unknown as typeof fetch

@@ -277,6 +277,34 @@ async def test_direct_submission_uses_durable_queue_once(case):
         assert await session.scalar(select(func.count()).select_from(store.RunDispatch)) == 1
 
 
+async def test_direct_submission_reuses_run_created_event_from_add_run(case):
+    sessions, uid, pair = case
+    run_id = uuid.uuid4()
+    async with sessions.begin() as session:
+        await store.add_run(
+            session,
+            run_id=run_id,
+            session_id=pair.single_session_id,
+            user_id=uid,
+            prompt="pipeline prompt",
+            pipeline_id="stateful-react-agent",
+            run_dir="unused-test-directory",
+        )
+        await events.seal_changes(session)
+
+    assert await coordination.enqueue_direct(
+        run_id, prompt="human", prompt_addendum="", user_id=uid
+    )
+    async with sessions() as session:
+        assert await session.scalar(select(func.count()).select_from(store.RunDispatch)) == 1
+        events_for_run = await session.scalar(
+            select(func.count())
+            .select_from(sl.SuperLinkEvent)
+            .where(sl.SuperLinkEvent.change_key == f"run:{run_id}:created")
+        )
+        assert events_for_run == 1
+
+
 async def test_disabling_feature_holds_already_queued_collaboration(case, monkeypatch):
     from server.super_link.contracts import DISPATCH_MARKER
 

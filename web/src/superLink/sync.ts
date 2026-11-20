@@ -23,9 +23,20 @@ import type {
   SpaceSnapshot,
 } from '../api/superLink.ts'
 import type { RunControlRecord } from '../types.ts'
+import {
+  applyPreview,
+  applyReset,
+  clearLive,
+  cloneLive,
+  emptyLiveState,
+  markArchiveLoaded,
+  type LiveState,
+} from './live.ts'
 import type {
   SpaceControlEvent,
   SpaceFact,
+  SpaceOutputReset,
+  SpacePreview,
   SpaceStreamCallbacks,
   SpaceStreamHandle,
   StreamCloseInfo,
@@ -64,6 +75,10 @@ export interface SpaceSyncState {
   /** True when the last confirmed state is not live but still displayed. */
   stale: boolean
   error: string
+  /**
+   * Event-consumption position: facts and full replacements move it; a
+   * partial refresh may read ahead but never advances it.
+   */
   cursor: string | null
   epoch: string | null
   seq: number
@@ -80,6 +95,8 @@ export interface SpaceSyncState {
   hasUpdates: boolean
   /** Local time of the last accepted snapshot, not a business timestamp. */
   updatedAt: number | null
+  /** Ephemeral, lossy run previews; never part of the durable cursor. */
+  live: LiveState
 }
 
 export interface SpaceCursorParts {
@@ -119,11 +136,15 @@ export interface SpaceSync {
   /** Leave history and rebuild the first page from a fresh snapshot. */
   returnToLatest: () => void
   loadMore: (kind: ListKind) => Promise<void>
+  /** Archived trace reloaded; release a terminal run's live preview. */
+  acknowledgeArchive: (runId: string) => void
   getState: () => SpaceSyncState
 }
 
 const FIRST_PAGE_LIMIT = 50
 const REFRESH_DEBOUNCE_MS = 150
+/** Coalesce token-rate previews; facts always emit immediately. */
+const LIVE_EMIT_MS = 80
 const MAX_FAILURES = 8
 const BASE_BACKOFF_MS = 500
 const MAX_BACKOFF_MS = 15_000
@@ -168,6 +189,7 @@ export function emptySpaceSyncState(): SpaceSyncState {
     history: false,
     hasUpdates: false,
     updatedAt: null,
+    live: emptyLiveState(),
   }
 }
 
@@ -253,6 +275,7 @@ function copyState(state: SpaceSyncState): SpaceSyncState {
     },
     actions: { ...state.actions, items: [...state.actions.items] },
     activeRunIds: [...state.activeRunIds],
+    live: cloneLive(state.live),
   }
 }
 
@@ -275,6 +298,7 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
   let dirty = new Set<InvalidateView>()
   let refreshTimer: unknown = null
   let retryTimer: unknown = null
+  let liveEmitTimer: unknown = null
   let fullRequestSeq = 0
   let latestFullRequest = 0
   let replaceSeq = 0
@@ -282,11 +306,63 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
   let attempts = 0
   let refreshFailures = 0
   let resyncInFlight = false
+  /** At most one scoped refresh request is in flight; newer hints queue behind it. */
+  let refreshInFlight = false
+  let refreshOwner = 0
+  let forceRefresh = false
+  /** A full snapshot (initial, resync, returnToLatest) owns the state right now. */
+  let replaceInFlight = false
+  let replaceOwner = 0
+  /**
+   * Highest snapshot seq already merged into the state. This is deliberately
+   * separate from `state.seq`, which is the event-consumption position used to
+   * establish `/events?after=` and to deduplicate facts. A partial refresh may
+   * observe a snapshot ahead of the event stream; merging it must not swallow
+   * the still-unconsumed fact that belongs to a view outside that refresh.
+   */
+  let appliedSeq = -1
 
   const alive = (gen: number) => !stopped && gen === generation
+  const terminal = () =>
+    state.status === 'auth_required' ||
+    state.status === 'not_found' ||
+    state.status === 'unavailable'
+
+  /**
+   * A full replacement takes over the sync cycle: any scoped refresh that is
+   * still waiting loses ownership. Its success, failure and cleanup callbacks
+   * must not touch the flag, the connection or the state of the new cycle.
+   */
+  function invalidateRefresh() {
+    refreshOwner += 1
+    refreshInFlight = false
+  }
+
+  /**
+   * A full-snapshot request takes over the sync cycle. Abandon every scoped
+   * refresh and any earlier full request: their success, failure and cleanup
+   * callbacks must not touch the connection or state of the new cycle.
+   */
+  function claimReplace(): number {
+    const owner = ++replaceOwner
+    invalidateRefresh()
+    return owner
+  }
 
   function emit() {
+    if (liveEmitTimer !== null) {
+      clearTimer(liveEmitTimer)
+      liveEmitTimer = null
+    }
     onState(copyState(state))
+  }
+
+  function emitLiveSoon() {
+    if (stopped || liveEmitTimer !== null) return
+    liveEmitTimer = setTimer(() => {
+      liveEmitTimer = null
+      onState(copyState(state))
+    }, LIVE_EMIT_MS)
   }
 
   function clearTimers() {
@@ -297,6 +373,10 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
     if (retryTimer !== null) {
       clearTimer(retryTimer)
       retryTimer = null
+    }
+    if (liveEmitTimer !== null) {
+      clearTimer(liveEmitTimer)
+      liveEmitTimer = null
     }
   }
 
@@ -309,11 +389,27 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
     streamOpen = false
   }
 
+  function markUpdates() {
+    if (!state.hasUpdates) {
+      state.hasUpdates = true
+      emit()
+    }
+  }
+
   function shutdown(status: 'auth_required' | 'not_found' | 'unavailable', message: string) {
+    // Invalidate every in-flight snapshot and stream callback: a late 200 must
+    // never resurrect a connection that has already been terminally closed.
+    generation += 1
     closeStream()
     clearTimers()
+    clearLive(state.live)
     dirty = new Set()
     resyncInFlight = false
+    replaceOwner += 1
+    replaceInFlight = false
+    refreshOwner += 1
+    refreshInFlight = false
+    forceRefresh = false
     state.status = status
     state.stale = state.space !== null
     state.error = message
@@ -327,11 +423,27 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
   }
 
   function scheduleRefresh(delay = REFRESH_DEBOUNCE_MS) {
-    if (stopped || refreshTimer !== null) return
+    if (stopped || terminal() || refreshTimer !== null) return
     refreshTimer = setTimer(() => {
       refreshTimer = null
       void refreshDirty()
     }, delay)
+  }
+
+  /**
+   * Re-arm the cycle after an out-of-cycle request re-queues scopes. The
+   * current owner (replacement, resync or reconnect) still picks the scopes up
+   * when it cannot refresh yet, so this must not force a request mid-takeover.
+   */
+  function wakeRefresh() {
+    if (stopped || terminal() || resyncInFlight || replaceInFlight || refreshInFlight) return
+    if (dirty.size === 0) return
+    if (state.history && !forceRefresh) {
+      markUpdates()
+      return
+    }
+    if (state.status !== 'live') return
+    scheduleRefresh(0)
   }
 
   function requeue(scopes: Set<InvalidateView>) {
@@ -399,16 +511,18 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
     state.hasUpdates = false
     state.updatedAt = now()
     replaceSeq += 1
+    appliedSeq = parsed.seq
+    forceRefresh = false
     dirty = new Set()
   }
 
   function applyRefresh(snapshot: SpaceSnapshot, parsed: SpaceCursorParts, scopes: Set<InvalidateView>) {
-    if (parsed.seq > state.seq) {
-      state.cursor = snapshot.cursor
-      state.epoch = parsed.epoch
-      state.seq = parsed.seq
-    }
+    // Merge the snapshot version into the views without moving the event
+    // cursor. The cursor only advances when a fact is actually consumed, so a
+    // fact that arrives later (even with seq <= this snapshot) is still
+    // processed and can invalidate the views this refresh did not touch.
     state.asOf = snapshot.as_of
+    appliedSeq = Math.max(appliedSeq, parsed.seq)
     state.updatedAt = now()
     if (scopes.has('space')) {
       state.space = snapshot.space
@@ -451,16 +565,25 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
   }
 
   async function loadInitial(gen: number): Promise<void> {
+    const owner = claimReplace()
+    replaceInFlight = true
     const request = ++fullRequestSeq
     latestFullRequest = request
     state.status = state.space ? 'reconnecting' : 'loading'
     state.error = ''
+    clearLive(state.live)
     emit()
     try {
       const snapshot = await loadSnapshot({ limit: FIRST_PAGE_LIMIT })
-      if (!alive(gen) || request !== latestFullRequest) return
+      if (!alive(gen) || request !== latestFullRequest || replaceOwner !== owner) return
       const parsed = snapshotCursor(snapshot)
       if (!parsed) throw syntheticSnapshotError()
+      if (state.epoch && parsed.epoch === state.epoch && parsed.seq < Math.max(state.seq, appliedSeq)) {
+        // A retry snapshot older than what the page already consumed is
+        // discarded; the reconnected stream replays the missing facts.
+        scheduleReconnect()
+        return
+      }
       applyReplace(snapshot, parsed)
       attempts = 0
       refreshFailures = 0
@@ -471,8 +594,10 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
       emit()
       openStreamConnection()
     } catch (error) {
-      if (!alive(gen)) return
+      if (!alive(gen) || request !== latestFullRequest || replaceOwner !== owner) return
       handleSnapshotFailure(error, true)
+    } finally {
+      if (replaceOwner === owner) replaceInFlight = false
     }
   }
 
@@ -506,10 +631,7 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
     if (stopped || retryTimer !== null) return
     attempts += 1
     if (attempts > MAX_FAILURES) {
-      state.status = 'unavailable'
-      state.stale = state.space !== null
-      state.error = MSG_UNAVAILABLE
-      emit()
+      shutdown('unavailable', MSG_UNAVAILABLE)
       return
     }
     if (state.space) {
@@ -528,7 +650,7 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
   }
 
   function reconnectNow() {
-    if (stopped || resyncInFlight) return
+    if (stopped || resyncInFlight || replaceInFlight) return
     if (!state.space || !state.cursor) {
       void loadInitial(generation)
       return
@@ -548,6 +670,8 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
     const callbacks: SpaceStreamCallbacks = {
       onFact: guarded(handleFact),
       onControl: guarded(handleControl),
+      onPreview: guarded(handlePreview),
+      onOutputReset: guarded(handleOutputReset),
       onOpen: guarded(handleOpen),
       onClose: guarded((info: StreamCloseInfo) => {
         stream = null
@@ -571,13 +695,16 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
       state.stale = false
       state.error = ''
     }
-    if (dirty.size > 0 && !state.history) scheduleRefresh(0)
+    if (dirty.size > 0 || forceRefresh) scheduleRefresh(0)
     emit()
   }
 
   function handleStreamClosed(info: StreamCloseInfo) {
     streamOpen = false
     if (stopped) return
+    // The next connection establishes a new output epoch; partial text from
+    // the previous one must not survive as if it were current.
+    if (clearLive(state.live)) emitLiveSoon()
     if (info.reason === 'http') {
       if (info.status === 401 || info.status === 403) {
         shutdown('auth_required', MSG_AUTH)
@@ -644,33 +771,72 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
     scheduleRefresh()
   }
 
-  async function refreshDirty(): Promise<void> {
-    if (stopped || resyncInFlight) return
-    if (!state.space || !state.cursor) return
-    if (state.history) {
-      if (dirty.size > 0 && !state.hasUpdates) {
-        state.hasUpdates = true
-        emit()
-      }
-      return
-    }
-    if (dirty.size === 0) return
-    const scopes = new Set(dirty)
-    dirty = new Set()
-    await loadRefresh(scopes, false)
+  function handlePreview(preview: SpacePreview) {
+    if (stopped) return
+    if (applyPreview(state.live, preview, spaceId)) emitLiveSoon()
   }
 
-  async function loadRefresh(scopes: Set<InvalidateView>, force: boolean): Promise<void> {
+  function handleOutputReset(reset: SpaceOutputReset) {
+    if (stopped) return
+    if (applyReset(state.live, reset, spaceId)) emitLiveSoon()
+  }
+
+  async function refreshDirty(): Promise<void> {
+    if (stopped || terminal() || resyncInFlight || replaceInFlight || refreshInFlight) return
+    if (!state.space || !state.cursor) return
+    const force = forceRefresh
+    if (state.history && !force) {
+      if (dirty.size > 0) markUpdates()
+      return
+    }
+    if (!force && dirty.size === 0) return
+    forceRefresh = false
+    const scopes = force ? new Set<InvalidateView>(ALL_VIEWS) : new Set(dirty)
+    dirty = new Set()
+    const owner = ++refreshOwner
+    refreshInFlight = true
+    try {
+      await loadRefresh(scopes, force, owner)
+    } finally {
+      // A shutdown, stop or restart invalidates this owner; the late response
+      // must not clear the flag of a newer in-flight refresh.
+      if (refreshOwner === owner) {
+        refreshInFlight = false
+        if (!stopped && !terminal() && !resyncInFlight && !replaceInFlight && dirty.size > 0) {
+          if (state.history && !forceRefresh) markUpdates()
+          else scheduleRefresh(0)
+        }
+      }
+    }
+  }
+
+  async function loadRefresh(
+    scopes: Set<InvalidateView>,
+    force: boolean,
+    owner: number,
+  ): Promise<void> {
     if (!state.cursor) return
     const gen = generation
     const request = ++fullRequestSeq
     latestFullRequest = request
+    const replaceMark = replaceSeq
     try {
       const snapshot = await loadSnapshot({
         min_cursor: state.cursor,
         limit: FIRST_PAGE_LIMIT,
       })
-      if (!alive(gen) || request !== latestFullRequest) return
+      if (!alive(gen)) return
+      if (request !== latestFullRequest) {
+        // A full snapshot owns the state now. Keep the scopes pending unless
+        // that full snapshot has already replaced the lists, so a failed full
+        // request cannot silently drop this invalidation.
+        if (!force && replaceMark === replaceSeq) {
+          requeue(scopes)
+          wakeRefresh()
+        }
+        return
+      }
+      if (refreshOwner !== owner) return
       const parsed = snapshotCursor(snapshot)
       if (!parsed) {
         requestResync()
@@ -680,12 +846,18 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
         requestResync()
         return
       }
-      if (parsed.seq < state.seq) {
-        // A slow response that predates the current cursor is discarded whole.
-        if (!force) {
-          requeue(scopes)
-          scheduleRefresh()
-        }
+      if (state.history && !force) {
+        // This request started before the reader entered history. Do not
+        // rewrite the list underneath them; keep the hint for a later merge.
+        requeue(scopes)
+        markUpdates()
+        return
+      }
+      if (parsed.seq < state.seq || parsed.seq < appliedSeq) {
+        // A slow response that predates the consumed events or an already
+        // merged snapshot is discarded whole.
+        requeue(scopes)
+        scheduleRefresh()
         return
       }
       applyRefresh(snapshot, parsed, scopes)
@@ -697,6 +869,16 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
       emit()
     } catch (error) {
       if (!alive(gen)) return
+      if (request !== latestFullRequest) {
+        // A late failure (401/404/410/...) from a request that no longer owns
+        // the cycle must not close the healthy stream or force a resync.
+        if (!force && replaceMark === replaceSeq) {
+          requeue(scopes)
+          wakeRefresh()
+        }
+        return
+      }
+      if (refreshOwner !== owner) return
       const info = readError(error)
       if (info.status === 401 || info.status === 403) {
         shutdown('auth_required', MSG_AUTH)
@@ -732,23 +914,27 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
   function requestResync() {
     if (stopped || resyncInFlight) return
     resyncInFlight = true
+    const owner = claimReplace()
+    replaceInFlight = false
+    forceRefresh = false
     closeStream()
     clearTimers()
     dirty = new Set()
+    clearLive(state.live)
     state.status = 'resyncing'
     state.stale = state.space !== null
     state.error = ''
     emit()
-    void runResync()
+    void runResync(owner)
   }
 
-  async function runResync(): Promise<void> {
+  async function runResync(owner: number): Promise<void> {
     const gen = generation
     const request = ++fullRequestSeq
     latestFullRequest = request
     try {
       const snapshot = await loadSnapshot({ limit: FIRST_PAGE_LIMIT })
-      if (!alive(gen) || request !== latestFullRequest) return
+      if (!alive(gen) || request !== latestFullRequest || replaceOwner !== owner) return
       const parsed = snapshotCursor(snapshot)
       if (!parsed) throw syntheticSnapshotError()
       applyReplace(snapshot, parsed)
@@ -761,7 +947,7 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
       emit()
       openStreamConnection()
     } catch (error) {
-      if (!alive(gen)) return
+      if (!alive(gen) || request !== latestFullRequest || replaceOwner !== owner) return
       resyncInFlight = false
       const info = readError(error)
       if (info.status === 401 || info.status === 403) {
@@ -795,6 +981,12 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
     if (!stopped) return
     stopped = false
     generation += 1
+    refreshOwner += 1
+    refreshInFlight = false
+    replaceOwner += 1
+    replaceInFlight = false
+    resyncInFlight = false
+    forceRefresh = false
     state.status = 'loading'
     state.stale = false
     state.error = ''
@@ -807,8 +999,14 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
     stopped = true
     generation += 1
     resyncInFlight = false
+    replaceOwner += 1
+    replaceInFlight = false
+    refreshOwner += 1
+    refreshInFlight = false
+    forceRefresh = false
     closeStream()
     clearTimers()
+    clearLive(state.live)
     dirty = new Set()
     state.status = 'stopped'
     state.error = ''
@@ -820,33 +1018,63 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
       start()
       return
     }
-    if (resyncInFlight) return
+    if (resyncInFlight || replaceInFlight) return
     if (state.status === 'auth_required' || state.status === 'not_found') return
     attempts = 0
     refreshFailures = 0
     void loadInitial(generation)
   }
 
+  function enqueueRefresh(force: boolean): void {
+    if (stopped || terminal() || resyncInFlight || replaceInFlight) return
+    if (!state.space || !state.cursor) return
+    if (force) {
+      forceRefresh = true
+      dirty = new Set<InvalidateView>(ALL_VIEWS)
+    }
+    if (refreshInFlight) return
+    if (refreshTimer !== null) {
+      clearTimer(refreshTimer)
+      refreshTimer = null
+    }
+    void refreshDirty()
+  }
+
   function refreshNow(): void {
-    if (stopped || resyncInFlight || !state.space || !state.cursor) return
-    const scopes = new Set<InvalidateView>(ALL_VIEWS)
-    void loadRefresh(scopes, true)
+    enqueueRefresh(true)
   }
 
   async function returnToLatest(): Promise<void> {
-    if (stopped || resyncInFlight || !state.space) return
-    state.history = false
-    state.hasUpdates = false
-    emit()
+    if (stopped || terminal() || resyncInFlight || replaceInFlight || !state.space) return
+    const owner = claimReplace()
+    replaceInFlight = true
     const gen = generation
     const request = ++fullRequestSeq
     latestFullRequest = request
+    state.error = ''
+    emit()
     try {
-      const snapshot = await loadSnapshot({ limit: FIRST_PAGE_LIMIT })
-      if (!alive(gen) || request !== latestFullRequest) return
+      const snapshot = await loadSnapshot({
+        limit: FIRST_PAGE_LIMIT,
+        ...(state.cursor ? { min_cursor: state.cursor } : {}),
+      })
+      if (!alive(gen) || request !== latestFullRequest || replaceOwner !== owner) return
       const parsed = snapshotCursor(snapshot)
       if (!parsed) {
         requestResync()
+        return
+      }
+      if (state.epoch && parsed.epoch !== state.epoch) {
+        requestResync()
+        return
+      }
+      if (parsed.seq < state.seq || parsed.seq < appliedSeq) {
+        // Keep the reader in history and keep every pending invalidation. A
+        // snapshot older than the consumed events must never rewind the
+        // cursor or replace the lists.
+        markUpdates()
+        state.error = '状态仍在更新，请稍后重试查看最新记录'
+        emit()
         return
       }
       applyReplace(snapshot, parsed)
@@ -862,13 +1090,21 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
       emit()
       if (!streamOpen) scheduleReconnect()
     } catch (error) {
-      if (!alive(gen)) return
+      if (!alive(gen) || request !== latestFullRequest || replaceOwner !== owner) return
       handleSnapshotFailure(error, false)
+    } finally {
+      if (replaceOwner === owner) {
+        replaceInFlight = false
+        if (!stopped && !terminal() && !resyncInFlight && dirty.size > 0) {
+          if (state.history) markUpdates()
+          else scheduleRefresh(0)
+        }
+      }
     }
   }
 
   async function loadMoreList(kind: ListKind): Promise<void> {
-    if (stopped || resyncInFlight || !state.space) return
+    if (stopped || terminal() || resyncInFlight || replaceInFlight || !state.space) return
     const current =
       kind === 'runs'
         ? state.runs
@@ -931,6 +1167,9 @@ export function createSpaceSync(deps: SpaceSyncDeps): SpaceSync {
       void returnToLatest()
     },
     loadMore: (kind) => loadMoreList(kind),
+    acknowledgeArchive: (runId) => {
+      if (markArchiveLoaded(state.live, runId)) emit()
+    },
     getState: () => copyState(state),
   }
 }

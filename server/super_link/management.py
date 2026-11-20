@@ -59,6 +59,20 @@ async def owned_space(
     return space
 
 
+async def participant_session_ids(
+    session: AsyncSession, space_id: uuid.UUID
+) -> list[uuid.UUID]:
+    """Participant sessions whose live output belongs to this space (SSE-T05)."""
+
+    return list(
+        await session.scalars(
+            select(sl.SuperLinkParticipant.session_id).where(
+                sl.SuperLinkParticipant.space_id == space_id
+            )
+        )
+    )
+
+
 def _next_limit(count: int) -> int:
     if count >= 20:
         raise CollaborationError("recovery_limit_exhausted")

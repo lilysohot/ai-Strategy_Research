@@ -622,25 +622,6 @@ async def enqueue_direct(
                 prompt=prompt,
                 prompt_addendum=prompt_addendum,
             )
-            await events.stage_for_space(
-                session,
-                member.space_id,
-                type="sl.run.changed",
-                change_key=f"run:{run.id}:created",
-                data={
-                    "status": "queued",
-                    "pipeline_id": run.pipeline_id,
-                    "started": False,
-                    "finished": False,
-                    "stopped": False,
-                    "error_code": None,
-                },
-                invalidate=("runs", "deliveries", "interventions", "actions"),
-                source_kind="run",
-                source_id=str(run.id),
-                participant_id=member.id,
-                session_id=run.session_id,
-                run_id=run.id,
-            )
+            await store.stage_run_change(session, run, "created")
             await events.seal_changes(session)
         return True

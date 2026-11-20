@@ -70,6 +70,9 @@ services:
       target: runtime
     container_name: ${CONTAINER_PREFIX}-api
     restart: unless-stopped
+    # Keep this above uvicorn's --timeout-graceful-shutdown (10s) so the API's
+    # lifespan cleanup (orchestrator and notifier) can finish before SIGKILL.
+    stop_grace_period: 30s
     environment:
       FRONTIER_AGENT_ALLOW_PRIVATE_HOSTS: "true"
       FRONTIER_AGENT_CONFIG: /app/config/config.yaml

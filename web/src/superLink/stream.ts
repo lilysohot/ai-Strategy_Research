@@ -23,6 +23,44 @@ export const SPACE_CONTROL_EVENTS = [
 ] as const
 export type SpaceControlEvent = (typeof SPACE_CONTROL_EVENTS)[number]
 
+export const SPACE_PREVIEW_EVENT = 'sl.run.preview'
+export const SPACE_OUTPUT_RESET_EVENT = 'sl.output_reset'
+
+/** Display-only run preview; never advances the durable space cursor. */
+export interface SpacePreview {
+  schema_version?: number
+  space_id?: string
+  run_id?: string
+  session_id?: string
+  output_epoch?: string
+  output_seq?: number
+  kind?: string
+  member?: { agent_id?: string; agent_kind?: string }
+  turn?: number | null
+  block_key?: string
+  text?: string
+  tool?: {
+    call_id?: string
+    name?: string
+    state?: string
+    ok?: boolean
+    skipped?: boolean
+    detail?: string
+    ms?: number | null
+  }
+  status?: string
+  stopped_by?: string
+  error?: string
+  [key: string]: unknown
+}
+
+export interface SpaceOutputReset {
+  schema_version?: number
+  space_id?: string
+  run_ids?: string[]
+  reason?: string
+}
+
 /** Minimal envelope; the sync state machine re-validates every field. */
 export interface SpaceFact {
   schema_version?: number
@@ -45,6 +83,10 @@ export interface StreamCloseInfo {
 export interface SpaceStreamCallbacks {
   onFact: (fact: SpaceFact) => void
   onControl: (event: SpaceControlEvent, reason: string) => void
+  /** Live run output; high frequency and explicitly lossy. */
+  onPreview?: (preview: SpacePreview) => void
+  /** Preview fragments were dropped; the listed runs need an archive reload. */
+  onOutputReset?: (reset: SpaceOutputReset) => void
   /** Called once the 2xx body is ready; used to reset retry attempts. */
   onOpen?: () => void
   /** Called exactly once unless ``stop()`` aborted the connection. */
@@ -191,6 +233,24 @@ export function openSpaceStream(options: SpaceStreamOptions): SpaceStreamHandle 
             }
             if (payload && typeof payload === 'object') {
               callbacks.onFact(payload as SpaceFact)
+            }
+            continue
+          }
+          if (
+            parsed.event === SPACE_PREVIEW_EVENT ||
+            parsed.event === SPACE_OUTPUT_RESET_EVENT
+          ) {
+            let payload: unknown
+            try {
+              payload = JSON.parse(parsed.data)
+            } catch {
+              continue
+            }
+            if (!payload || typeof payload !== 'object') continue
+            if (parsed.event === SPACE_PREVIEW_EVENT) {
+              callbacks.onPreview?.(payload as SpacePreview)
+            } else {
+              callbacks.onOutputReset?.(payload as SpaceOutputReset)
             }
             continue
           }
