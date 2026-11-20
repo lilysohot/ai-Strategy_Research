@@ -3,9 +3,12 @@ import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import WelcomeOrbit from '@/components/WelcomeOrbit.vue'
 import BlogArtwork from '@/components/BlogArtwork.vue'
+import ThemeToggle from '@/components/ThemeToggle.vue'
 import { blogPosts, readingMinutes } from '@/content/blog'
+import { useTheme } from '@/theme'
 
 const route = useRoute()
+const { theme } = useTheme()
 const categories = ['全部', '技术', '设计', '生活'] as const
 const category = ref<(typeof categories)[number]>('全部')
 const query = ref('')
@@ -91,7 +94,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="blog-page">
+  <div class="blog-page" :data-theme="theme">
     <a class="skip-link" href="#blog-content">跳到正文</a>
     <div v-if="isArticle && article" class="reading-progress" :style="{ width: `${readProgress}%` }" aria-hidden="true"></div>
     <header class="blog-header blog-container">
@@ -104,7 +107,10 @@ onUnmounted(() => {
         <RouterLink to="/blog#archive" :class="{ active: route.hash === '#archive' }">归档</RouterLink>
         <RouterLink to="/blog#about" :class="{ active: route.hash === '#about' }">关于</RouterLink>
       </nav>
-      <span class="header-signature">保持好奇，慢慢生长 <span aria-hidden="true">↗</span></span>
+      <div class="blog-header-actions">
+        <span class="header-signature">保持好奇，慢慢生长 <span aria-hidden="true">↗</span></span>
+        <ThemeToggle compact />
+      </div>
     </header>
 
     <main id="blog-content" tabindex="-1" class="blog-container">

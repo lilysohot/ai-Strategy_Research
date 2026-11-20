@@ -758,6 +758,18 @@ async def run_once(args: argparse.Namespace) -> int:
         target_key = "main_agent_tools" if args.pipeline_id == "agent_team" else "agent_tools"
         overrides["agent"][target_key] = [*overrides["agent"][target_key], *extra]
 
+    if os.environ.get("FRONTIER_SUPER_LINK_CHANNEL"):
+        target_key = "main_agent_tools" if args.pipeline_id == "agent_team" else "agent_tools"
+        overrides["agent"][target_key] = list(
+            dict.fromkeys(
+                [
+                    *overrides["agent"][target_key],
+                    "register_super_link_delivery",
+                    "read_super_link_inbox",
+                ]
+            )
+        )
+
     if os.environ.get("FRONTIER_WATCH_CHANNEL"):
         target_key = "main_agent_tools" if args.pipeline_id == "agent_team" else "agent_tools"
         overrides["agent"][target_key] = list(
@@ -979,7 +991,17 @@ async def run_once(args: argparse.Namespace) -> int:
     except Exception as exc:
         error = f"{type(exc).__name__}: {exc}"
         logging.getLogger("worker").exception("run failed")
-        _frame("run_finished", ok=False, error=error, duration_s=round(time.time() - started, 2))
+        # A cooperative stop before a final answer can make the scheduler
+        # raise its no-output error. Preserve the actual stop and any captured
+        # partial text; an exception must not turn an acknowledged stop into a
+        # normal failure or manufacture a successful result.
+        stopped_by = stop.stopped_by or workflow_stop_reason or bridge.stopped_by or ""
+        if stopped_by and not final_answer:
+            final_answer = bridge.final_content.strip()
+        _frame(
+            "run_finished", ok=False, error=error, stopped_by=stopped_by,
+            final_answer=final_answer[:50_000], duration_s=round(time.time() - started, 2),
+        )
     finally:
         stdin_task.cancel()
         # Flush the realtime tail before the process exits: deltas emitted after

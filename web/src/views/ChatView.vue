@@ -1213,7 +1213,7 @@ watch(
   margin: 8px 0 6px;
   border: 1px solid var(--line-strong);
   border-radius: 8px;
-  background: color-mix(in srgb, var(--muted) 6%, var(--bg));
+  background: color-mix(in srgb, var(--muted) 6%, var(--bg-app));
   padding: 12px 14px;
   max-height: 320px;
   overflow: auto;
@@ -1246,12 +1246,13 @@ watch(
   overflow-x: auto;
   padding: 10px;
   border-radius: 6px;
-  background: #0d0e0b;
+  background: var(--code-bg);
+  color: var(--code-text);
   border: 1px solid var(--line);
 }
 
 .turn-body :deep(code) {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--code-inline-bg);
   padding: 1px 4px;
   border-radius: 4px;
 }

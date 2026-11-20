@@ -36,6 +36,7 @@ from server.routes import models as models_routes
 from server.routes import monitor as monitor_routes
 from server.routes import runs as runs_routes
 from server.routes import sessions as sessions_routes
+from server.routes import super_link as super_link_routes
 from server.security import check_startup_secrets
 from server.store import init_db
 
@@ -119,7 +120,16 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
                 batch=get_config().auto_batch_events,
             )
         )
+    super_link_task: asyncio.Task[None] | None = None
+    if readiness.ok and get_config().super_link_enabled and not get_config().restore_mode:
+        from server.super_link.worker import coordination_loop
+
+        super_link_task = asyncio.create_task(coordination_loop(get_orchestrator()))
     yield
+    if super_link_task is not None:
+        super_link_task.cancel()
+        with contextlib.suppress(asyncio.CancelledError):
+            await super_link_task
     if scheduler_task is not None:
         scheduler_task.cancel()
         with contextlib.suppress(asyncio.CancelledError):
@@ -154,6 +164,7 @@ app.include_router(business_routes.router)
 app.include_router(monitor_routes.router)
 # 语料读链（108 号 生产 PG/web 读链）：只读端点，鉴权同既有路由；fail-closed 拒绝原样透传。
 app.include_router(corpus_routes.router)
+app.include_router(super_link_routes.router)
 # 业务错误统一渲染为契约信封（字段定位、冲突、幂等、无权）；注册后才能覆盖默认 500。
 app.add_exception_handler(biz.BusinessError, business_routes.business_error_handler)
 

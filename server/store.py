@@ -2168,7 +2168,11 @@ async def session_exists(session_id: uuid.UUID) -> bool:
 
 
 async def list_sessions(
-    *, user_id: uuid.UUID, limit: int | None = None, offset: int = 0
+    *,
+    user_id: uuid.UUID,
+    limit: int | None = None,
+    offset: int = 0,
+    ordinary_only: bool = False,
 ) -> list[Session]:
     """List a user's non-deleted sessions, most recent first.
 
@@ -2181,23 +2185,36 @@ async def list_sessions(
             .where(Session.user_id == user_id, Session.deleted_at.is_(None))
             .order_by(Session.updated_at.desc())
         )
+        if ordinary_only:
+            from server.super_link.visibility import ordinary_sessions
+
+            predicate = await ordinary_sessions(session)
+            if predicate is not None:
+                stmt = stmt.where(predicate)
         if limit is not None:
             stmt = stmt.limit(limit).offset(offset)
         return list((await session.execute(stmt)).scalars().all())
 
 
-async def count_sessions(*, user_id: uuid.UUID) -> int:
+async def count_sessions(*, user_id: uuid.UUID, ordinary_only: bool = False) -> int:
     """Total non-deleted sessions owned by ``user_id``.
 
     Paired with :func:`list_sessions` so the API can report whether more pages
     exist — a client that only sees the current page cannot tell.
     """
     async with get_sessionmaker()() as session:
-        result = await session.execute(
+        stmt = (
             select(func.count())
             .select_from(Session)
             .where(Session.user_id == user_id, Session.deleted_at.is_(None))
         )
+        if ordinary_only:
+            from server.super_link.visibility import ordinary_sessions
+
+            predicate = await ordinary_sessions(session)
+            if predicate is not None:
+                stmt = stmt.where(predicate)
+        result = await session.execute(stmt)
         return int(result.scalar_one())
 
 

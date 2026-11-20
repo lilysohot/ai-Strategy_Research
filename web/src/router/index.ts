@@ -43,6 +43,16 @@ const routes: RouteRecordRaw[] = [
         name: 'models',
         component: () => import('../views/ModelConfigsView.vue'),
       },
+      {
+        path: 'super-link',
+        name: 'super-link',
+        component: () => import('../views/SuperLinkView.vue'),
+      },
+      {
+        path: 'super-link/:spaceId',
+        name: 'super-link-detail',
+        component: () => import('../views/SuperLinkView.vue'),
+      },
       // Real 404 instead of a silent redirect (T12): an unknown deep link gets a
       // page that says so, with the shell nav still there as the way out.
       {

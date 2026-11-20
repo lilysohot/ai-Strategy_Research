@@ -7,6 +7,7 @@ import { ApiError } from '@/api/client'
 import { WORKSPACE_NAV_ITEMS, type WorkspaceArea } from '@/business-ui'
 import { useAuthStore } from '@/stores/auth'
 import { useSessionsStore } from '@/stores/sessions'
+import ThemeToggle from '@/components/ThemeToggle.vue'
 
 const props = withDefaults(defineProps<{
   activeArea?: WorkspaceArea
@@ -134,6 +135,10 @@ onMounted(async () => {
     </header>
 
     <nav class="workspace-nav" aria-label="工作台功能">
+      <RouterLink class="workspace-nav__item" :to="{ name: 'super-link' }" style="text-decoration: none">
+        <span class="workspace-nav__copy"><strong>Super-link</strong><small>独立协作空间</small></span>
+        <span aria-hidden="true">↗</span>
+      </RouterLink>
       <button
         v-for="item in WORKSPACE_NAV_ITEMS"
         :key="item.id"
@@ -230,6 +235,7 @@ onMounted(async () => {
           </el-dropdown-menu>
         </template>
       </el-dropdown>
+      <ThemeToggle icon-only />
     </footer>
   </aside>
 </template>
@@ -297,7 +303,7 @@ onMounted(async () => {
 }
 
 .workspace-nav__item:hover {
-  background: rgba(255, 255, 255, 0.035);
+  background: var(--surface-hover);
   color: var(--text);
 }
 
@@ -373,7 +379,7 @@ onMounted(async () => {
 }
 
 .research-item:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--surface-hover);
 }
 
 .research-item.active {
@@ -435,8 +441,16 @@ onMounted(async () => {
 }
 
 .rail-account {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 12px;
   border-top: 1px solid var(--line);
+}
+
+.rail-account :deep(.el-dropdown) {
+  min-width: 0;
+  flex: 1;
 }
 
 .account-button {
@@ -459,7 +473,7 @@ onMounted(async () => {
   height: 28px;
   border-radius: 50%;
   background: var(--accent);
-  color: #11120e;
+  color: var(--accent-text);
   font-weight: 700;
 }
 

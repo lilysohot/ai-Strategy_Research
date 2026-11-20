@@ -207,7 +207,7 @@ onBeforeUnmount(() => stream?.stop())
 .notice-actions { display: flex; align-items: flex-end; flex-direction: column; gap: 6px; }
 .notice-actions > span { width: 100%; }
 .notice-actions > span :deep(.el-button) { width: 100%; }
-.notice-aside { padding: 28px 22px; border-left: 1px solid var(--line); background: #141711; overflow: auto; }
+.notice-aside { padding: 28px 22px; border-left: 1px solid var(--line); background: var(--bg-canvas); overflow: auto; }
 .aside-section { padding: 18px 0; border-bottom: 1px solid var(--line); }
 .aside-section:first-child { padding-top: 14px; }
 .aside-section--accent { border-top: 2px solid var(--accent); }

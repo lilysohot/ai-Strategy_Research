@@ -73,6 +73,11 @@ class ServerConfig(BaseSettings):
     # Worker subprocess pool size. Runs in the *same* session are serialised by
     # the orchestrator; this is the cross-session parallelism ceiling.
     worker_pool_size: int = 2
+    # Optional Super-link runtime. Its schema is migrated separately.
+    super_link_enabled: bool = False
+    super_link_max_automatic_runs: int = Field(default=20, ge=1, le=1000)
+    super_link_redis_url: str = "redis://127.0.0.1:6379/0"
+    super_link_namespace: str = "super-link:v1"
     # Hard wall-clock budget per run, applied by the orchestrator (SIGKILL
     # fallback) and also handed to the worker via FRONTIER_AGENT_TASK_WALL_TIME_S.
     # Keep the runtime's half-wall research floor at 450s; profile caps research

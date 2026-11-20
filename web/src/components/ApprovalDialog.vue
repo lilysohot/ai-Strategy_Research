@@ -200,8 +200,8 @@ async function decide(decision: ApprovalDecisionValue) {
 .approval-preview {
   margin: 0 0 10px;
   padding: 10px;
-  background: #1e1e1e;
-  color: #d4d4d4;
+  background: var(--code-bg);
+  color: var(--code-text);
   border-radius: 8px;
   font-size: 12px;
   max-height: 200px;

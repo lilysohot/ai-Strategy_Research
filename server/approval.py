@@ -97,6 +97,10 @@ def assess_web_tool_risk(name: str, args: dict, cwd: str) -> ToolRisk:
         return risk
     if name in _WEB_AUTO_APPROVED_WATCH_TOOLS:
         return ToolRisk(RISK_SAFE, "trusted session monitoring channel", risk.target)
+    if name in {"register_super_link_delivery", "read_super_link_inbox"}:
+        # Registration only: parent-bound identity, no immediate publication or
+        # recipient execution. The tool rejects runs without the opt-in channel.
+        return ToolRisk(RISK_SAFE, "trusted collaboration registration channel", risk.target)
     if name in _WEB_AUTO_APPROVED_READS:
         return ToolRisk(RISK_SAFE, "read-only lookup", risk.target)
     if name in _WEB_AUTO_APPROVED_MUTATIONS:

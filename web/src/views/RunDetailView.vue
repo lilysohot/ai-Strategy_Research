@@ -471,8 +471,8 @@ defineExpose({ load })
 }
 
 .tl-content :deep(pre) {
-  background: #1e1e1e;
-  color: #d4d4d4;
+  background: var(--code-bg);
+  color: var(--code-text);
   padding: 8px;
   border-radius: 6px;
   overflow-x: auto;

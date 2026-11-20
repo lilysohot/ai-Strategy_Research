@@ -116,6 +116,7 @@ async def _isolated_database(tmp_path, monkeypatch):
     monkeypatch.setattr(cfg, "monitor_enabled", False)
     monkeypatch.setattr(cfg, "monitor_streams_enabled", False)
     monkeypatch.setattr(cfg, "auto_enabled", False)
+    monkeypatch.setattr(cfg, "super_link_enabled", False)
     # The PG override must retain the root fixture's file isolation too.
     monkeypatch.setattr(cfg, "runs_root", tmp_path / "runs")
     monkeypatch.setenv("SERVER_RUNS_ROOT", str(cfg.runs_root))
@@ -218,14 +219,14 @@ def pg_migrated(pg_dsn: str) -> str:
 
 @pytest.fixture
 async def pg_clean(pg_migrated: str):
-    """Empty every application table between tests, keeping ``alembic_version``."""
+    """Empty application data, preserving legacy and optional migration histories."""
     from server import store
 
     engine = store.get_engine()
     async with engine.begin() as conn:
         rows = await conn.exec_driver_sql(
             "SELECT tablename FROM pg_tables WHERE schemaname='public' "
-            "AND tablename <> 'alembic_version'"
+            "AND tablename NOT IN ('alembic_version', 'super_link_alembic_version')"
         )
         names = [row[0] for row in rows]
         if names:

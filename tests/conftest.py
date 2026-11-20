@@ -78,6 +78,7 @@ async def _isolated_database(tmp_path, monkeypatch):
     monkeypatch.setattr(cfg, "monitor_enabled", False)
     monkeypatch.setattr(cfg, "monitor_streams_enabled", False)
     monkeypatch.setattr(cfg, "auto_enabled", False)
+    monkeypatch.setattr(cfg, "super_link_enabled", False)
     saved_db = cfg.database_url
     saved_runs_root = cfg.runs_root
     saved_env = os.environ.get("SERVER_RUNS_ROOT")

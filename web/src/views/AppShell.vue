@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import DisclaimerBar from '../components/DisclaimerBar.vue'
+import ThemeToggle from '../components/ThemeToggle.vue'
 import { useAuthStore } from '../stores/auth'
 
 const auth = useAuthStore()
@@ -24,6 +25,7 @@ async function onLogout(): Promise<void> {
         返回工作台
       </el-button>
       <span class="shell__spacer" />
+      <ThemeToggle icon-only />
       <span v-if="auth.user" class="shell__user">{{ auth.user.username }}</span>
       <el-button link type="primary" @click="onLogout">退出</el-button>
     </ElHeader>

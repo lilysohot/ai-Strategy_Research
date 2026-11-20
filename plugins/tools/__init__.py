@@ -44,6 +44,7 @@ from plugins.tools.run_python_code import run_python_code
 from plugins.tools.stop_subagent import stop_subagent
 from plugins.tools.strategy_lint import strategy_lint
 from plugins.tools.submit_report import submit_report
+from plugins.tools.super_link import read_super_link_inbox, register_super_link_delivery
 from plugins.tools.task_board import add_task, finish_planning, update_task
 from plugins.tools.view_image import view_image
 from plugins.tools.watch_targets import get_watch_targets, submit_watch_intents
@@ -54,6 +55,8 @@ from plugins.tools.write_file import write_file
 logger = logging.getLogger(__name__)
 
 _BUILTIN_TOOLS: list[Tool] = [
+    register_super_link_delivery,
+    read_super_link_inbox,
     get_watch_targets,
     submit_watch_intents,
     web_search,

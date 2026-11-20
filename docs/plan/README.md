@@ -7,6 +7,7 @@
 
 | 文档 | 当前职责 |
 |---|---|
+| [Super-link 基础通信与 SSE 执行计划](super-link-communication-foundation.md) | 2026-11-20 v0.6，PR-SL-01；§12—§19 保存通信、入口、控制及启停证据；§20 是 SSE-T01—T07 的唯一执行台账，T01 契约与来源盘点设计完成，T02—T07 待开始；不自动启动服务或迁移业务库 |
 | [corpus_search 与 corpus_fetch 上下文精简](corpus-context-and-report-delivery-optimization.md) | 2026-11-11 v2.2，待实施；PR-DATA-01/12、PR-OUT-06/07。首阶段仅裁切元数据，不强制新增 fetch；明确存储和原文读取链路，纳入轻量性能对比，导航模式按场景验证后启用 |
 | [search 与 fetch 内容保留优化讨论稿](corpus-search-evidence-delivery-redesign.md) | v1.4；2026-10-23 查询相关展示选择已本地实现，129 项回归及固定句柄回放通过；未重启服务，直接证据交付与上下文索引仍待实施，Claims/items 暂缓 |
 | [资料库研究链路改造](corpus-research-chain-redesign.md) | 较早的完整架构讨论，非本轮实施清单；当前范围以 search/fetch 讨论稿为准，Claims/items 与团队改造暂缓 |

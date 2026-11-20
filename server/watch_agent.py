@@ -23,6 +23,25 @@ async def call(run_id: uuid.UUID, operation: str, payload: dict[str, Any]) -> di
         event = await session.scalar(
             select(store.WatchEvent).where(store.WatchEvent.run_id == run_id)
         )
+        # Automatic collaboration is not a human instruction, but it still uses
+        # normal writable collaboration continuity (not the watch read-only path).
+        automatic_delivery = False
+        from server.config import get_config
+
+        if get_config().super_link_enabled:
+            from server.super_link.models import SuperLinkExecution, SuperLinkFeedback
+
+            automatic_delivery = (
+                await session.scalar(
+                    select(SuperLinkExecution.run_id).where(SuperLinkExecution.run_id == run_id)
+                )
+            ) is not None
+            if not automatic_delivery:
+                automatic_delivery = (
+                    await session.scalar(
+                        select(SuperLinkFeedback.run_id).where(SuperLinkFeedback.run_id == run_id)
+                    )
+                ) is not None
         if event and event.round_id:
             hits = await longterm.live_hits(session, event)
             if not hits:
@@ -99,7 +118,11 @@ async def call(run_id: uuid.UUID, operation: str, payload: dict[str, Any]) -> di
                 if previous and rule and previous.id != rule.id:
                     raise biz.ValidationError("intent_key 已属于另一个监控目标")
                 cancelling_paused = bool(
-                    op == "cancel" and rule and rule.status == "paused" and event is None
+                    op == "cancel"
+                    and rule
+                    and rule.status == "paused"
+                    and event is None
+                    and not automatic_delivery
                 )
                 if previous and previous.status != "active" and not cancelling_paused:
                     raise biz.ValidationError("该监控意图已暂停或取消，不可自动重建")

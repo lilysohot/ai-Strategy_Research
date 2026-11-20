@@ -32,6 +32,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from server import restore_check, store, uploads
 from server.config import get_config
+from server.super_link.contracts import DISPATCH_MARKER
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +67,25 @@ async def enqueue(
 ) -> store.RunDispatch:
     """在同一事务内登记派发意图（只 flush，不提交）。"""
     cfg = get_config()
+    stopped_space = False
+    if cfg.super_link_enabled:
+        from server.super_link.models import SuperLinkParticipant, SuperLinkSpace
+
+        member = await session.scalar(
+            select(SuperLinkParticipant.id).where(SuperLinkParticipant.session_id == research_id)
+        )
+        if member is not None:
+            prompt_addendum = DISPATCH_MARKER + prompt_addendum.removeprefix(DISPATCH_MARKER)
+            state = await session.scalar(
+                select(SuperLinkSpace.control_state)
+                .join(SuperLinkParticipant, SuperLinkParticipant.space_id == SuperLinkSpace.id)
+                .where(SuperLinkParticipant.id == member)
+            )
+            stopped_space = state in {"stopping", "stopped"}
+            if stopped_space:
+                run = await session.get(store.Run, run_id)
+                if run is not None and run.status == "queued":
+                    run.status, run.stopped_by, run.finished_at = "stopped", "user_stop", _now()
     row = store.RunDispatch(
         run_id=run_id,
         user_id=user_id,
@@ -73,7 +93,7 @@ async def enqueue(
         session_key=session_key,
         prompt=prompt,
         prompt_addendum=prompt_addendum or None,
-        status=PENDING,
+        status=ABANDONED if stopped_space else PENDING,
         max_attempts=max_attempts if max_attempts is not None else cfg.dispatch_max_attempts,
         claim_version=0,
     )
@@ -226,6 +246,9 @@ async def claim_due(session: AsyncSession, *, limit: int = 8) -> list[store.RunD
     for row in result.scalars():
         if len(claimed) >= limit:
             break
+        if (row.prompt_addendum or "").startswith(DISPATCH_MARKER) and not cfg.super_link_enabled:
+            row.next_attempt_at = now + timedelta(seconds=cfg.dispatch_busy_delay_seconds)
+            continue
         run = await session.get(store.Run, row.run_id)
         if run is None or run.status != "queued":
             row.status = ABANDONED
@@ -249,6 +272,13 @@ async def claim_due(session: AsyncSession, *, limit: int = 8) -> list[store.RunD
             row.last_error = "研究已删除"
             continue
         from server.monitor_longterm import launch_block_reason, stop_cancelled_launch
+
+        if cfg.super_link_enabled:
+            from server.super_link.coordination import fifo_blocked
+
+            if await fifo_blocked(session, run):
+                row.next_attempt_at = now + timedelta(seconds=cfg.dispatch_busy_delay_seconds)
+                continue
 
         if reason := await launch_block_reason(session, row.run_id):
             if reason == "monitor_cancelled":
@@ -458,13 +488,31 @@ async def dispatch_once(orch: Any) -> int:
                     row.lease_expires_at = None
                     row.next_attempt_at = _now() + timedelta(seconds=5)
                     continue
+                if (row.prompt_addendum or "").startswith(DISPATCH_MARKER) and not get_config().super_link_enabled:
+                    row.status = PENDING
+                    row.lease_expires_at = None
+                    continue
+                if get_config().super_link_enabled:
+                    from server.super_link.models import SuperLinkParticipant, SuperLinkSpace
+
+                    space = await session.scalar(
+                        select(SuperLinkSpace)
+                        .join(SuperLinkParticipant, SuperLinkParticipant.space_id == SuperLinkSpace.id)
+                        .where(SuperLinkParticipant.session_id == run.session_id)
+                        .with_for_update(of=SuperLinkSpace)
+                    )
+                    if space is not None and space.paused:
+                        row.status = PENDING
+                        row.lease_expires_at = None
+                        row.next_attempt_at = _now() + timedelta(seconds=5)
+                        continue
                 await orch.submit(
                     run_id=run_id.hex,
                     session_id=session_key,
                     prompt=prompt,
                     user_id=user_id,
                     agent_tools="",
-                    prompt_addendum=addendum,
+                    prompt_addendum=addendum.removeprefix(DISPATCH_MARKER),
                     pipeline_id=run.pipeline_id,
                     backfill_turn=False,
                 )

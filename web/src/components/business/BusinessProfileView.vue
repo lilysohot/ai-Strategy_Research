@@ -850,7 +850,7 @@ async function submitCorrection(): Promise<void> {
 .plan-overview-empty { padding: 36px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .plan-overview-empty strong { display: block; margin-bottom: 5px; }
 .record-placeholder, .aside-note { color: var(--muted); font-size: 13px; }
-.profile-aside { padding: 28px 22px; border-left: 1px solid var(--line); background: #141711; overflow: auto; }
+.profile-aside { padding: 28px 22px; border-left: 1px solid var(--line); background: var(--bg-canvas); overflow: auto; }
 .aside-block { padding: 18px 0; border-bottom: 1px solid var(--line); }
 .aside-block:first-child { padding-top: 0; }
 .aside-block h3 { margin: 6px 0 8px; font-size: 16px; }

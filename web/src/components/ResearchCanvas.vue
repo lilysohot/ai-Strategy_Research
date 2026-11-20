@@ -242,7 +242,7 @@ defineExpose({ load })
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #141611;
+  background: var(--bg-canvas);
   border-left: 1px solid var(--line);
   color: var(--text);
 }
@@ -342,8 +342,8 @@ defineExpose({ load })
   padding: 12px;
   border: 1px solid var(--line);
   border-radius: 6px;
-  background: #0d0e0b;
-  color: var(--text);
+  background: var(--code-bg);
+  color: var(--code-text);
 }
 
 .code-body {

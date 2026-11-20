@@ -22,7 +22,10 @@ import App from './App.vue'
 import { setUnauthorizedHandler } from './api/client'
 import router from './router'
 import { useAuthStore } from './stores/auth'
+import { initializeTheme } from './theme'
 import './style.css'
+
+initializeTheme()
 
 const app = createApp(App)
 

@@ -1,0 +1,20 @@
+const labels: Record<string, string> = {
+  queued: '排队中', running: '执行中', completed: '运行完成', failed: '运行失败', stopped: '已停止',
+  registered: '已登记', awaiting_exit: '等待运行结束', finalizing: '保存成果中',
+  source_failed: '来源运行失败', finalization_exhausted: '收尾需要处理',
+  awaiting_receipt: '等待接收', awaiting_inspection: '等待旁路检查', inspecting: '旁路检查中',
+  inspection_retry: '检查等待重试', inspection_exhausted: '检查重试已耗尽',
+  inspection_configuration_required: '检查配置待处理', correction_required: '等待原 Agent 补正',
+  informational_available: '信息已可读取', awaiting_admission: '等待进入执行队列',
+  admission_held: '执行受理待处理', execution_queued: '接收方排队中', execution_running: '接收方执行中',
+  execution_completed: '接收方运行完成', execution_finalizing: '接收方保存成果中',
+  execution_failed: '接收方运行失败', execution_stopped: '接收方已停止', transport_blocked: '交付传输受阻',
+  pass: '通过', caveat: '附带说明通过', block: '阻断', incomplete: '检查未完成', ready: '已保存', pending: '等待保存', executing: '运行中',
+  automatic_run_limit: '自动跟进额度已用完', queue_full: '执行队列已满，等待空位',
+  continuity_not_saved: '本轮记忆尚未保存', continuity_head_mismatch: '会话记忆版本待核对',
+  source_run_not_complete: '来源运行未正常完成', owner_abandoned: '已放弃本次收尾',
+  recovery_failed: '收尾恢复失败', inspection_failed: '检查服务暂时失败',
+  cancelled_by_stop: '停止时已取消后续处理', adopted: '已采纳', rejected: '已拒绝',
+  expired: '已超时拒绝', abandoned: '已终止', dropped: '未采纳', undelivered: '未送达',
+}
+export function linkLabel(value: string): string { return labels[value] ?? value }

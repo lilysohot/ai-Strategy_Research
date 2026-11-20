@@ -112,8 +112,8 @@ async def list_sessions_route(
     limit: int = Query(DEFAULT_SESSION_LIMIT, ge=1, le=MAX_SESSION_LIMIT),
     offset: int = Query(0, ge=0),
 ) -> dict[str, Any]:
-    rows = await list_sessions(user_id=user.id, limit=limit, offset=offset)
-    total = await count_sessions(user_id=user.id)
+    rows = await list_sessions(user_id=user.id, limit=limit, offset=offset, ordinary_only=True)
+    total = await count_sessions(user_id=user.id, ordinary_only=True)
     metadata = await session_display_metadata(rows)
     return {
         "sessions": [_session_view(s, metadata[s.id]) for s in rows],

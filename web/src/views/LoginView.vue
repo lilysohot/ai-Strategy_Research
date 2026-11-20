@@ -4,11 +4,14 @@ import { useRouter } from 'vue-router'
 import { ElMessage, type InputInstance } from 'element-plus'
 import WelcomeOrbit from '@/components/WelcomeOrbit.vue'
 import DisclaimerBar from '@/components/DisclaimerBar.vue'
+import ThemeToggle from '@/components/ThemeToggle.vue'
 import { useAuthStore } from '@/stores/auth'
 import { auth as authApi } from '@/api'
+import { useTheme } from '@/theme'
 
 const auth = useAuthStore()
 const router = useRouter()
+const { theme } = useTheme()
 const loginVisible = ref(false)
 const entrance = ref<HTMLButtonElement>()
 const usernameInput = ref<InputInstance>()
@@ -165,10 +168,13 @@ function toggleMode() {
 </script>
 
 <template>
-  <div class="login-page" :class="{ 'is-entered': loginVisible }">
+  <div class="login-page" :class="{ 'is-entered': loginVisible }" :data-theme="theme">
     <header class="landing-header">
       <span class="wordmark">First Step<span>&nbsp;Agent</span><i aria-hidden="true">✳</i></span>
-      <span class="header-note">独立思考 · 深入探索</span>
+      <div class="landing-header__actions">
+        <span class="header-note">独立思考 · 深入探索</span>
+        <ThemeToggle compact />
+      </div>
     </header>
 
     <main class="landing-main">
@@ -300,6 +306,24 @@ function toggleMode() {
 
 <style scoped>
 .login-page {
+  --landing-bg: #0c130f;
+  --landing-glow: #35402a24;
+  --landing-text: #f0efe2;
+  --landing-grid: #d3d0a00d;
+  --landing-line: #c9c7a61c;
+  --landing-soft: #c8c9b9;
+  --landing-accent: #d8ca87;
+  --landing-muted: #929c8b;
+  --landing-eyebrow: #c4bd8d;
+  --landing-dot: #cabc76;
+  --landing-copy: #a7b09e;
+  --landing-strong: #e4e3cd;
+  --landing-aside: #c9cebd;
+  --landing-card: #151e18f5;
+  --landing-card-line: #b6bf8b30;
+  --landing-input: #0f1712;
+  --landing-shadow: #0003;
+  --landing-footer-mark: #64715c;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -307,8 +331,29 @@ function toggleMode() {
   min-height: 100svh;
   overflow: hidden;
   padding: 0 clamp(24px, 5.4vw, 96px) 52px;
-  background: #0c130f radial-gradient(ellipse at 75% 40%, #35402a24, transparent 60%);
-  color: #f0efe2;
+  background: var(--landing-bg) radial-gradient(ellipse at 75% 40%, var(--landing-glow), transparent 60%);
+  color: var(--landing-text);
+}
+
+.login-page[data-theme='light'] {
+  --landing-bg: #f7f0e5;
+  --landing-glow: #c9ad6d26;
+  --landing-text: #302b23;
+  --landing-grid: #8e795a12;
+  --landing-line: #9c835d38;
+  --landing-soft: #5e564a;
+  --landing-accent: #7b6519;
+  --landing-muted: #716759;
+  --landing-eyebrow: #796924;
+  --landing-dot: #8a7421;
+  --landing-copy: #665d50;
+  --landing-strong: #40382e;
+  --landing-aside: #51493d;
+  --landing-card: #fffaf1f2;
+  --landing-card-line: #a38c6948;
+  --landing-input: #fffdf8;
+  --landing-shadow: #6c563426;
+  --landing-footer-mark: #8a7d6d;
 }
 
 .login-page::before {
@@ -317,7 +362,7 @@ function toggleMode() {
   inset: 0;
   pointer-events: none;
   opacity: .22;
-  background-image: linear-gradient(#d3d0a00d 1px, transparent 1px), linear-gradient(90deg, #d3d0a00d 1px, transparent 1px);
+  background-image: linear-gradient(var(--landing-grid) 1px, transparent 1px), linear-gradient(90deg, var(--landing-grid) 1px, transparent 1px);
   background-size: 90px 90px;
   mask-image: linear-gradient(90deg, transparent, black);
 }
@@ -331,7 +376,13 @@ function toggleMode() {
 
 .landing-header {
   min-height: 108px;
-  border-bottom: 1px solid #c9c7a61c;
+  border-bottom: 1px solid var(--landing-line);
+}
+
+.landing-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
 }
 
 .wordmark {
@@ -344,18 +395,18 @@ function toggleMode() {
 
 .wordmark > span {
   font-weight: 350;
-  color: #c8c9b9;
+  color: var(--landing-soft);
 }
 
 .wordmark > i {
   margin-left: 12px;
-  color: #d8ca87;
+  color: var(--landing-accent);
   font-style: normal;
   font-size: 28px;
 }
 
 .header-note {
-  color: #929c8b;
+  color: var(--landing-muted);
   font-size: 12px;
   letter-spacing: 3px;
 }
@@ -377,7 +428,7 @@ function toggleMode() {
 
 .eyebrow {
   margin: 0 0 32px;
-  color: #c4bd8d;
+  color: var(--landing-eyebrow);
   font: 10px/1.6 monospace;
   letter-spacing: 2.7px;
 }
@@ -388,8 +439,8 @@ function toggleMode() {
   height: 6px;
   margin-right: 12px;
   border-radius: 50%;
-  background: #cabc76;
-  box-shadow: 0 0 12px #cabc7640;
+  background: var(--landing-dot);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--landing-dot) 28%, transparent);
 }
 
 .intro-copy h1 {
@@ -401,12 +452,12 @@ function toggleMode() {
 }
 
 .intro-copy h1 span {
-  color: #d6c989;
+  color: var(--landing-accent);
 }
 
 .intro-description {
   margin: 28px 0 0;
-  color: #a7b09e;
+  color: var(--landing-copy);
   font-size: 15px;
   line-height: 2;
   letter-spacing: 1px;
@@ -417,7 +468,7 @@ function toggleMode() {
   align-items: center;
   gap: 18px;
   margin-top: 48px;
-  color: #e4e3cd;
+  color: var(--landing-strong);
   font-size: 13px;
   letter-spacing: 2px;
 }
@@ -425,7 +476,7 @@ function toggleMode() {
 .enter-hint small {
   display: block;
   margin-top: 5px;
-  color: #939e88;
+  color: var(--landing-muted);
   font: 9px monospace;
   letter-spacing: 2.5px;
 }
@@ -435,14 +486,14 @@ function toggleMode() {
   place-items: center;
   width: 48px;
   height: 48px;
-  border: 1px solid #c9bf8170;
+  border: 1px solid color-mix(in srgb, var(--landing-accent) 58%, transparent);
   border-radius: 50%;
   font-size: 24px;
   transition: background .3s, transform .3s;
 }
 
 .landing-main:has(.entrance-trigger:hover) .enter-arrow {
-  background: #c9bf8120;
+  background: color-mix(in srgb, var(--landing-accent) 14%, transparent);
   transform: translate(3px, -3px);
 }
 
@@ -477,7 +528,7 @@ function toggleMode() {
   margin: 0;
   font-size: 27px;
   line-height: 1.6;
-  color: #c9cebd;
+  color: var(--landing-aside);
   font-weight: 350;
 }
 
@@ -488,10 +539,10 @@ function toggleMode() {
   width: min(100%, 440px);
   margin: 42px 2% 42px 0;
   padding: 32px 36px;
-  border: 1px solid #b6bf8b30;
+  border: 1px solid var(--landing-card-line);
   border-radius: 16px;
-  background: #151e18f5;
-  box-shadow: 0 30px 100px #0003;
+  background: var(--landing-card);
+  box-shadow: 0 30px 100px var(--landing-shadow);
 }
 
 .back-button {
@@ -499,13 +550,13 @@ function toggleMode() {
   padding: 0;
   border: 0;
   background: transparent;
-  color: #adb59f;
+  color: var(--landing-copy);
   cursor: pointer;
   font-size: 12px;
 }
 
 .back-button:hover {
-  color: #e0d392;
+  color: var(--landing-accent);
 }
 
 .back-button:disabled {
@@ -527,7 +578,7 @@ function toggleMode() {
 
 .subtitle {
   margin: 0 0 28px;
-  color: #a7b09e;
+  color: var(--landing-copy);
   font-size: 13px;
 }
 
@@ -551,7 +602,7 @@ function toggleMode() {
 .hint {
   margin: 20px 0 0;
   font-size: 11px;
-  color: #a0aa96;
+  color: var(--landing-muted);
   line-height: 1.8;
 }
 
@@ -561,13 +612,13 @@ function toggleMode() {
 
 .login-card :deep(.el-form-item__label) {
   font-size: 12px;
-  color: #c6cdbb;
+  color: var(--landing-soft);
 }
 
 .login-card :deep(.el-input__wrapper) {
   min-height: 44px;
   border-radius: 6px;
-  background: #0f1712;
+  background: var(--landing-input);
 }
 
 .login-card :deep(.el-input__inner) {
@@ -582,8 +633,8 @@ function toggleMode() {
 .landing-footer {
   gap: 20px;
   min-height: 70px;
-  border-top: 1px solid #c9c7a61c;
-  color: #939e88;
+  border-top: 1px solid var(--landing-line);
+  color: var(--landing-muted);
   font-size: 11px;
   letter-spacing: 2px;
 }
@@ -595,7 +646,7 @@ function toggleMode() {
 
 .footer-topics i {
   margin: 0 16px;
-  color: #64715c;
+  color: var(--landing-footer-mark);
   font-style: normal;
 }
 

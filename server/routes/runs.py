@@ -247,6 +247,15 @@ async def submit_run(
     ):
         raise HTTPException(status_code=404, detail="会话不存在")
 
+    if cfg.super_link_enabled:
+        from server.super_link.contracts import CollaborationError
+        from server.super_link.runtime import require_session_mode
+
+        try:
+            await require_session_mode(session_uuid, pipeline_id)
+        except CollaborationError as exc:
+            raise HTTPException(status_code=409, detail=str(exc)) from None
+
     # DATA-06: uploaded bytes go through a controlled staging area first, so a
     # partially written attachment never appears in the read-only ``inputs`` a
     # worker may already be reading. plan() finishes every check (file count /

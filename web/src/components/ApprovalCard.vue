@@ -182,7 +182,7 @@ async function decide(decision: ApprovalDecisionValue): Promise<void> {
 .approval-facts code {
   padding: 1px 6px;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--code-inline-bg);
 }
 
 .approval-preview {
@@ -192,8 +192,8 @@ async function decide(decision: ApprovalDecisionValue): Promise<void> {
   padding: 10px;
   border: 1px solid var(--line);
   border-radius: 6px;
-  background: #0d0e0b;
-  color: var(--text);
+  background: var(--code-bg);
+  color: var(--code-text);
   white-space: pre-wrap;
   word-break: break-all;
 }
